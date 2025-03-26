@@ -1,0 +1,78 @@
+@startuml
+'https://plantuml.com/class-diagram
+package "entities"{
+interface CakePart {
++ getName(): String
++ getId() : int
++ getPrice(): int
+}
+class CakeTop extends CakePart{
+                                -int id
+                                -String name
+                                -int price
+                                }
+class CakeBottom extends CakePart{
+                                 -int id
+                                 -String name
+                                 -int price
+                                 }
+}
+
+package "config"{
+class SessionConfig{
++ sessionConfig(): SessionHandler
+}
+
+class ThymeLeafConfig{
++ templateEngine(): TemplateEngine
+}
+}
+
+package "controller"{
+class AdminController{
+
+}
+class UserController{
+
+}
+}
+
+package "exception"{
+
+Exception DatabaseException{
++ DatabaseException(String)
++ DatabaseException(String, String)
+}
+}
+
+package "persistence"{
+class ConnectionPool{
+- ds: HikariDataSource
+- instance: ConnectionPool
+- LOGGER: Logger
+
+- ConnectionPool()
++ close(): void
+- createHikariConnectionPool(String, String, String, String): HikariDataSource
++ getConnection(): Connection
++ getInstance(String, String, String, String): ConnectionPool
+}
+
+class OrderMapper{
++ addOrder(int, Order, ConnectionPool): Order
++ deleteOrder(int, ConnectionPool): void
++ getAllOrdersPerUser(int, ConnectionPool): List<Order>
++ getOrderById(int, ConnectionPool): Order
++ setToDone(boolean, int, ConnectionPool): void
+}
+
+class UserMapper{
++ createUserAdmin(String, String, ConnectionPool): void
++ createUserCustomer(String, String, ConnectionPool): void
++ login(String, String, ConnectionPool): User
+}
+
+class OrderLineMapper{
+
+}
+@enduml
