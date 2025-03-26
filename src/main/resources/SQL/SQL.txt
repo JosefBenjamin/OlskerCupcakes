@@ -1,0 +1,157 @@
+BEGIN;
+
+-- THIS QUERY RESETS THE DATABASE TO A DEFAULT STATE, BE SURE THAT IS WHAT YOU WANT BEFORE YOU USE IT!!
+
+
+
+-- Dropping all tables for a clean start
+
+DROP TABLE IF EXISTS public.orderline CASCADE;
+
+DROP TABLE IF EXISTS public.order CASCADE;
+DROP TABLE IF EXISTS public.orders CASCADE;
+
+DROP TABLE IF EXISTS public.users CASCADE;
+
+DROP TABLE IF EXISTS public.bottom CASCADE;
+
+DROP TABLE IF EXISTS public.topping CASCADE;
+
+
+
+-- Creates the needed tables
+
+CREATE TABLE IF NOT EXISTS public.bottom
+(
+    bot_id serial NOT NULL,
+    bot_name character varying COLLATE pg_catalog."default",
+    bot_price integer,
+    CONSTRAINT bottom_pkey PRIMARY KEY (bot_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.orders
+(
+    order_id serial NOT NULL,
+    total_price integer DEFAULT 0.00,
+    order_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    is_done boolean,
+    user_id integer,
+    CONSTRAINT order_pkey PRIMARY KEY (order_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.orderline
+(
+    ol_id serial NOT NULL,
+    top_id integer,
+    bot_id integer,
+    ol_price integer,
+    quantity integer,
+    order_id integer,
+    CONSTRAINT orderline_pkey PRIMARY KEY (ol_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.topping
+(
+    top_id serial NOT NULL,
+    top_name character varying COLLATE pg_catalog."default",
+    top_price integer,
+    CONSTRAINT topping_pkey PRIMARY KEY (top_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.users
+(
+    user_id serial NOT NULL,
+    email character varying COLLATE pg_catalog."default",
+    password character varying COLLATE pg_catalog."default",
+    is_admin boolean DEFAULT false,
+    balance integer DEFAULT 100,
+    CONSTRAINT users_pkey PRIMARY KEY (user_id)
+);
+
+
+
+-- Adding constraints and references
+
+ALTER TABLE IF EXISTS public.orders
+    ADD CONSTRAINT order_user_id_fkey FOREIGN KEY (user_id)
+    REFERENCES public.users (user_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.orders
+    ADD CONSTRAINT order_user_id_fkey1 FOREIGN KEY (user_id)
+    REFERENCES public.users (user_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.orderline
+    ADD CONSTRAINT orderline_bot_id_fkey FOREIGN KEY (bot_id)
+    REFERENCES public.bottom (bot_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.orderline
+    ADD CONSTRAINT orderline_bot_id_fkey1 FOREIGN KEY (bot_id)
+    REFERENCES public.bottom (bot_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.orderline
+    ADD CONSTRAINT orderline_top_id_fkey FOREIGN KEY (top_id)
+    REFERENCES public.topping (top_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.orderline
+    ADD CONSTRAINT orderline_top_id_fkey1 FOREIGN KEY (top_id)
+    REFERENCES public.topping (top_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.orderline
+    ADD FOREIGN KEY (order_id)
+    REFERENCES public.orders (order_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+
+-- Adding baseline/fake data to the tables
+
+INSERT INTO public.users (email, password, is_admin, balance)
+VALUES ('Admin@mail.dk', '1234', true, 100000),
+       ('User@mail.dk', '1234', false, 0);
+
+INSERT INTO public.topping (top_name, top_price)
+VALUES ('Chocolate', 5),
+       ('Blueberry', 5),
+       ('Raspberry', 5),
+       ('Crispy', 6),
+       ('Strawberry', 6),
+       ('Rum/Raisin', 7),
+       ('Orange', 8),
+       ('Lemon', 8),
+       ('Blue Cheese', 9);
+
+INSERT INTO public.bottom (bot_name, bot_price)
+VALUES ('Chocolate', 5),
+       ('Vanilla', 5),
+       ('Nutmeg', 5),
+       ('Pistachio', 6),
+       ('Almond', 7);
+
+
+COMMIT;
