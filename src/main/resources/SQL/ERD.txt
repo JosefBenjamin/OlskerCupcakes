@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.bottom
     CONSTRAINT bottom_pkey PRIMARY KEY (bot_id)
 );
 
-CREATE TABLE IF NOT EXISTS public."order"
+CREATE TABLE IF NOT EXISTS public.orders
 (
     order_id serial NOT NULL,
     total_price integer,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS public.users
     CONSTRAINT users_pkey PRIMARY KEY (user_id)
 );
 
-ALTER TABLE IF EXISTS public."order"
+ALTER TABLE IF EXISTS public.orders
     ADD CONSTRAINT order_user_id_fkey FOREIGN KEY (user_id)
     REFERENCES public.users (user_id) MATCH SIMPLE
     ON UPDATE NO ACTION
@@ -56,7 +56,7 @@ ALTER TABLE IF EXISTS public."order"
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS public."order"
+ALTER TABLE IF EXISTS public.orders
     ADD CONSTRAINT order_user_id_fkey1 FOREIGN KEY (user_id)
     REFERENCES public.users (user_id) MATCH SIMPLE
     ON UPDATE NO ACTION
@@ -98,7 +98,7 @@ ALTER TABLE IF EXISTS public.orderline
 
 ALTER TABLE IF EXISTS public.orderline
     ADD FOREIGN KEY (order_id)
-    REFERENCES public."order" (order_id) MATCH SIMPLE
+    REFERENCES public.orders (order_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
