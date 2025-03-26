@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS public.orderline
     ol_id serial NOT NULL,
     top_id integer,
     bot_id integer,
-    cake_price integer,
+    ol_price integer,
     quantity integer,
     order_id integer,
     CONSTRAINT orderline_pkey PRIMARY KEY (ol_id)
