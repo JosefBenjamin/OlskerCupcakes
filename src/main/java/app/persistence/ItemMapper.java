@@ -2,7 +2,6 @@ package app.persistence;
 
 import app.entities.CakeBottom;
 import app.entities.CakeTop;
-import app.entities.Order;
 import app.exceptions.DatabaseException;
 
 import java.sql.Connection;
@@ -35,5 +34,22 @@ public class ItemMapper
         return  cakeBottoms;
     }
 
+    public static List<CakeTop> getAllToppings(ConnectionPool connectionPool) throws DatabaseException{
 
+        List<CakeTop> cakeTops = new ArrayList<>();
+        String sql = "SELECT * FROM topping";
+
+        try(Connection connection = connectionPool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql))
+        {
+            ResultSet rs = ps.executeQuery();
+            while(rs.next())
+            {
+                cakeTops.add(new CakeTop(rs.getInt("top_id"), rs.getString("top_name"), rs.getInt("top_price")));
+            }
+        } catch (SQLException e){
+            throw new DatabaseException("Error while getting all toppings", e);
+        }
+        return  cakeTops;
+    }
 }
