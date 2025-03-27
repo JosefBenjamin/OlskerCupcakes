@@ -45,7 +45,7 @@ public class User {
     @Override
     public String toString() {
         String result;
-        result = "User ID: " + this.userId + " \nUsername: " + this.username + "\nPassword: " + this.password + "\nIs admin: " + this.isAdmin + "\nBalance: " + this.balance;
+        result = "User ID: " + this.userId + " \nUsername: " + this.email + "\nPassword: " + this.password + "\nIs admin: " + this.isAdmin + "\nBalance: " + this.balance;
         return result;
     }
 }
