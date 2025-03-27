@@ -3,18 +3,31 @@ package app.entities;
 public class User {
 
     private int userId;
-    private String username;
+    private String email;
     private String password;
     private boolean isAdmin;
     private int balance = 0;
 
-    public User(int userId, String username, String password, boolean isAdmin) {
+    public User(int userId, String email, String password, boolean isAdmin, int balance) {
         this.isAdmin = isAdmin;
         this.password = password;
-        this.username = username;
+        this.email = email;
         this.userId = userId;
+        this.balance = balance;
     }
 
+    public User(int userId, String email, String password, boolean isAdmin) {
+        this.userId = userId;
+        this.email = email;
+        this.password = password;
+        this.isAdmin = isAdmin;
+    }
+
+    public User(String email, String password, boolean isAdmin) {
+        this.email = email;
+        this.password = password;
+        this.isAdmin = isAdmin;
+    }
 
     public boolean getAdminStatus() {
         return isAdmin;
@@ -22,8 +35,8 @@ public class User {
     public int getUserId() {
         return userId;
     }
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
     public int getBalance() {
         return balance;
