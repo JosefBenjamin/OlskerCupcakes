@@ -27,18 +27,19 @@
     </nav>
 </header>
 
-<h1>Log ind for at bestille cupcakes</h1>
+<h1>Opret en bruger for at bestille cupcakes</h1>
 
-<form class="login-form" method="post">
+<form class="login-from" method="post">
     <input type="email" name="email" placeholder="E-mail"/>
-    <input type="password" name="password" placeholder="Password"/>
+    <input type="password" name="password1" placeholder="Password" required minlength="2"/>
+    <input type="password" name="password2" placeholder="Gentag password" required minlength="2"/>
 
-    <button type="submit" formaction="/login">Log ind</button>
+    <button type="submit" formaction="/createuser">Opret Bruger</button>
 
     <div><p th:text="${message}"> </p></div>
 </form>
 
-<p><a href="registeruser.html" th:href="@{/registeruser}">Eller opret bruger ➡ </a></p>
+<p><a href="login.html" th:href="@{/login}">Eller log ind ➡ </a></p>
 
 <footer>
     <div class="footer-content">
