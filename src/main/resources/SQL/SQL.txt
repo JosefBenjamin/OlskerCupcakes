@@ -25,28 +25,28 @@ CREATE TABLE IF NOT EXISTS public.bottom
 (
     bot_id serial NOT NULL,
     bot_name character varying COLLATE pg_catalog."default",
-    bot_price integer,
+    bot_price integer NOT NULL,
     CONSTRAINT bottom_pkey PRIMARY KEY (bot_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.orders
 (
     order_id serial NOT NULL,
-    total_price integer DEFAULT 0.00,
+    total_price integer DEFAULT 0,
     order_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
     is_done boolean,
-    user_id integer,
+    user_id integer NOT NULL,
     CONSTRAINT order_pkey PRIMARY KEY (order_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.orderline
 (
     ol_id serial NOT NULL,
-    top_id integer,
-    bot_id integer,
-    ol_price integer,
-    quantity integer,
-    order_id integer,
+    top_id integer NOT NULL,
+    bot_id integer NOT NULL,
+    ol_price integer NOT NULL,
+    quantity integer NOT NULL,
+    order_id integer NOT NULL,
     CONSTRAINT orderline_pkey PRIMARY KEY (ol_id)
 );
 
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS public.topping
 (
     top_id serial NOT NULL,
     top_name character varying COLLATE pg_catalog."default",
-    top_price integer,
+    top_price integer NOT NULL,
     CONSTRAINT topping_pkey PRIMARY KEY (top_id)
 );
 
@@ -133,7 +133,7 @@ ALTER TABLE IF EXISTS public.orderline
 
 INSERT INTO public.users (email, password, is_admin, balance)
 VALUES ('Admin@mail.dk', '1234', true, 100000),
-       ('User@mail.dk', '1234', false, 0);
+       ('User@mail.dk', '1234', false, 100);
 
 INSERT INTO public.topping (top_name, top_price)
 VALUES ('Chocolate', 5),
