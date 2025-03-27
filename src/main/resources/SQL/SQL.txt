@@ -2,8 +2,6 @@ BEGIN;
 
 -- THIS QUERY RESETS THE DATABASE TO A DEFAULT STATE, BE SURE THAT IS WHAT YOU WANT BEFORE YOU USE IT!!
 
-
-
 -- Dropping all tables for a clean start
 
 DROP TABLE IF EXISTS public.orderline CASCADE;
