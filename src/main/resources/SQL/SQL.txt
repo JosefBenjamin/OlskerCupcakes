@@ -133,7 +133,7 @@ ALTER TABLE IF EXISTS public.orderline
 
 INSERT INTO public.users (email, password, is_admin, balance)
 VALUES ('Admin@mail.dk', '1234', true, 100000),
-       ('User@mail.dk', '1234', false, 0);
+       ('User@mail.dk', '1234', false, 100);
 
 INSERT INTO public.topping (top_name, top_price)
 VALUES ('Chocolate', 5),
