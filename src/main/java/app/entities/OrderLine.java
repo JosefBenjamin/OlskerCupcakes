@@ -1,12 +1,12 @@
 package app.entities;
 
 public class OrderLine {
-    private int topId;
-    private int bottomId;
-    private int quantity;
-    private int price;
-    private int orderId;
-    private int orderLineId;
+    private final int topId;
+    private final int bottomId;
+    private final int quantity;
+    private final int price;
+    private final int orderId;
+    private final int orderLineId;
 
     OrderLine(int ol_id, int topID, int bottomID, int quantity, int ol_price, int orderId) {
         this.orderLineId = ol_id;
