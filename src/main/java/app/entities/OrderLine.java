@@ -2,20 +2,18 @@ package app.entities;
 
 public class OrderLine {
     private int topId;
-    private CakeTop cakeTop;
-    private CakeBottom cakeBottom;
     private int bottomId;
     private int quantity;
     private int price;
     private int orderId;
+    private int orderLineId;
 
-    OrderLine(CakeTop cakeTop, CakeBottom bottom, int quantity, int price, int orderId) {
-        this.topId = cakeTop.getId();
-        this.bottomId = cakeBottom.getId();
-        this.cakeTop = cakeTop;
-        this.cakeBottom = bottom;
+    OrderLine(int ol_id, int topID, int bottomID, int quantity, int ol_price, int orderId) {
+        this.orderLineId = ol_id;
+        this.topId = topID;
+        this.bottomId = bottomID;
         this.quantity = quantity;
-        this.price = cakeTop.getPrice() + cakeBottom.getPrice();
+        this.price = ol_price;
         this.orderId = orderId;
     }
 
