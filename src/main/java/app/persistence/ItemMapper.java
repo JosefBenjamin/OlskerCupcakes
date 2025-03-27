@@ -34,6 +34,31 @@ public class ItemMapper
         return  cakeBottoms;
     }
 
+    public static CakeBottom getBottomById(ConnectionPool connectionPool, int bottomId) throws DatabaseException {
+
+        CakeBottom bottom = null;
+        String sql = "SELECT * FROM bottom WHERE bot_id = ?";
+
+        try(Connection connection = connectionPool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql))
+        {
+            ps.setInt(1, bottomId);
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+            {
+             int id  = rs.getInt("bottom_id");
+             String name = rs.getString("bottom_name");
+             int price = rs.getInt("bottom_price");
+             bottom = new CakeBottom(id, name, price);
+            }
+        } catch (SQLException e)
+        {
+            throw new DatabaseException("Error while getting bottom by id", e);
+        }
+        return bottom;
+    }
+
     public static List<CakeTop> getAllToppings(ConnectionPool connectionPool) throws DatabaseException{
 
         List<CakeTop> cakeTops = new ArrayList<>();
