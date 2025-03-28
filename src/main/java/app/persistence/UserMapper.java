@@ -66,7 +66,7 @@ public class UserMapper {
 
         List<User> memberList = new ArrayList<>();
 
-        String sql = "select user_id, email, password, isAdmin, balance " +
+        String sql = "select user_id, email, password, is_admin, balance " +
                 "from users " +
                 "order by user_id ";
 
@@ -79,7 +79,7 @@ public class UserMapper {
                 int userId = rs.getInt("user_id");
                 String email = rs.getString("email");
                 String password = rs.getString("password");
-                boolean isAdmin = rs.getBoolean("isAdmin");
+                boolean isAdmin = rs.getBoolean("is_admin");
                 int balance = rs.getInt("balance");
                 memberList.add(new User(userId, email, password, isAdmin, balance));
             }
