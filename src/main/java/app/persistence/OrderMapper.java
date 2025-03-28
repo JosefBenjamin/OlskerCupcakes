@@ -10,7 +10,8 @@ import java.util.ArrayList;
 
 public class OrderMapper {
 
-    public static Order getOrderByOrderLineID(int orderID, ConnectionPool pool) throws DatabaseException {
+    public static Order getOrderByOrderLineID(int orderID,
+                                              ConnectionPool pool) throws DatabaseException {
       //Local attribute
         Order result                = null;
         String sql                  = "SELECT * FROM orders WHERE order_id = ?";
@@ -33,7 +34,8 @@ public class OrderMapper {
         return result;
     }
 
-    public static Order getLatestOrderByUserID(int userID, ConnectionPool pool) throws DatabaseException {
+    public static Order getLatestOrderByUserID(int userID,
+                                               ConnectionPool pool) throws DatabaseException {
         // Local attribute
         Order result                = null;
         String sql                  = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
@@ -53,6 +55,29 @@ public class OrderMapper {
             throw new DatabaseException(exc.getMessage());
         }
 
+        return result;
+    }
+
+    public List<Order> getAllOrdersByUserID(int userID,
+                                            ConnectionPool pool) throws DatabaseException {
+        // Local attributes
+        List<Order> result          = new ArrayList<>();
+        String sql                  = "SELECT * FROM orders WHERE user_id = ?";
+
+        try (Connection con         = pool.getConnection();
+             PreparedStatement ps   = con.prepareStatement(sql)) {
+
+            ps.setInt(1,userID);
+            ResultSet rs            = ps.executeQuery();
+            while(rs.next()){
+                int orderID         = rs.getInt("order_id");
+                int price           = rs.getInt("total_price");
+                Timestamp date      = rs.getTimestamp("order_date");
+                result.add(new Order(orderID, price, date, userID));
+            } // while
+        } catch ( SQLException exc){
+            throw new DatabaseException(exc.getMessage());
+        } // catch
         return result;
     }
 }
