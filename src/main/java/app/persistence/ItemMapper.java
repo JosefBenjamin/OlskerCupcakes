@@ -118,7 +118,7 @@ public class ItemMapper
         try (Connection con         = pool.getConnection();
              PreparedStatement ps   = con.prepareStatement(sql)){
 
-            // The ID is referring top_id/bot_id in the DB
+            // The ID is referring (top/bot)_id in the DB
             ps.setInt(1,ID);
             ResultSet rs            = ps.executeQuery();
             if(rs.next()){
