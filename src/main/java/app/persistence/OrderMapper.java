@@ -80,4 +80,46 @@ public class OrderMapper {
         } // catch
         return result;
     }
+
+    public List<Order> getAllNotDoneOrders(ConnectionPool pool) throws DatabaseException {
+        List<Order> result          = new ArrayList<>();
+        String sql                  = "SELECT * FROM orders WHERE is_done = false ORDER BY order_date DESC";
+        try (Connection con         = pool.getConnection();
+             PreparedStatement ps   = con.prepareStatement(sql)){
+
+            ResultSet rs            = ps.executeQuery();
+            while(rs.next()){
+                int orderID         = rs.getInt("order_id");
+                int price           = rs.getInt("total_price");
+                Timestamp date      = rs.getTimestamp("order_date");
+                int userID          = rs.getInt("user_id");
+                result.add(new Order(orderID, price, date, userID));
+            }
+        } catch (SQLException exc){
+            throw new DatabaseException(exc.getMessage());
+        }
+
+        return result;
+    }
+
+    public List<Order> getAllDoneOrders(ConnectionPool pool) throws DatabaseException {
+        List<Order> result          = new ArrayList<>();
+        String sql                  = "SELECT * FROM orders WHERE is_done = true ORDER BY order_date DESC";
+        try (Connection con         = pool.getConnection();
+             PreparedStatement ps   = con.prepareStatement(sql)){
+
+            ResultSet rs            = ps.executeQuery();
+            while(rs.next()){
+                int orderID         = rs.getInt("order_id");
+                int price           = rs.getInt("total_price");
+                Timestamp date      = rs.getTimestamp("order_date");
+                int userID          = rs.getInt("user_id");
+                result.add(new Order(orderID, price, date, userID));
+            }
+        } catch (SQLException exc){
+            throw new DatabaseException(exc.getMessage());
+        }
+
+        return result;
+    }
 }
