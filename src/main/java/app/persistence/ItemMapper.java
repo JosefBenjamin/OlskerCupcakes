@@ -150,7 +150,7 @@ public class ItemMapper
         try(Connection con                      = pool.getConnection();
             PreparedStatement ps                = con.prepareStatement(sql)){
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs                        = ps.executeQuery();
             while(rs.next()){
                 if(TRUEisTopping_FALSEisBottom){
                     // Add a CakeTop to the result List
