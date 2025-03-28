@@ -6,6 +6,7 @@ public class OrderLine {
     private int quantity;
     private int price;
     private int orderId;
+    private int olID;
 
     public OrderLine(int topID, int botID, int quantity, int price, int orderId) {
         this.topId = topID;
@@ -14,6 +15,16 @@ public class OrderLine {
         this.price = price;
         this.orderId = orderId;
     }
+
+    public OrderLine(int olID, int topID, int botID, int price, int quantity, int orderId) {
+        this.olID = olID;
+        this.topId = topID;
+        this.bottomId = botID;
+        this.quantity = quantity;
+        this.price = price;
+        this.orderId = orderId;
+    }
+
 
     public int getTopId() {
         return this.topId;
@@ -35,18 +46,24 @@ public class OrderLine {
         return this.orderId;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public int getOlID() {
+        return this.olID;
     }
 
     public OrderLine getOrderedLine() {
         return this;
     }
 
+
     @Override
     public String toString() {
-        String result;
-        result = "Top ID: " + this.topId + " \nBottom ID: " + this.bottomId + "\nQuantity: " + this.quantity + "\nPrice: " + this.price + "\nOrder ID: " + this.orderId;
-        return result;
+        return "OrderLine{" +
+                "topId=" + topId +
+                ", bottomId=" + bottomId +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", orderId=" + orderId +
+                ", olID=" + olID +
+                '}';
     }
 }

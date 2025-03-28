@@ -31,7 +31,7 @@ public class OrderLineMapper {
                 int botID = rs.getInt("bot_id");
                 int quantity = rs.getInt("quantity");
                 int price = rs.getInt("ol_price");
-                result.add(new OrderLine(olID, topID, botID, quantity, price, orderID));
+                result.add(new OrderLine(olID, topID, botID, quantity, price));
             }
 
         } catch (SQLException exc){
@@ -55,7 +55,7 @@ public class OrderLineMapper {
                 int price = rs.getInt("ol_price");
                 int quantity = rs.getInt("quantity");
                 int olID = rs.getInt("ol_id");
-                result.add(new OrderLine(olID, topID, botID,quantity, price, orderID));
+                result.add(new OrderLine(olID, topID, botID, quantity, price));
             }
 
         } catch (SQLException exc){

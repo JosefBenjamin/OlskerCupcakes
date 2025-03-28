@@ -149,6 +149,7 @@ class OrderLineMapperTest {
         int price = 1;
         int orderID = 10;
         try{
+
             OrderLineMapper.createOrderLine(pool, topID, botID, quantity, price, orderID);
         } catch (DatabaseException exc){
             fail("Database setup failed in createNewOrderLine");
