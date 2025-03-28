@@ -45,3 +45,4 @@ jobs:
           DB_PASSWORD: postgres
           DB_NAME: olskercupcakes
           DB_URL: jdbc:postgresql://localhost:5432/olskercupcakes
+
