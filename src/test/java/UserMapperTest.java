@@ -34,7 +34,13 @@ public class UserMapperTest {
                     stmt.execute("DROP TABLE IF EXISTS test.users");
 
                     // Create tables as copy of original public schema structure
-                    stmt.execute("CREATE TABLE test.users AS (SELECT * from public.users) WITH NO DATA");
+                    stmt.execute("CREATE TABLE IF NOT EXISTS test.users (" +
+                            "user_id SERIAL PRIMARY KEY, " +
+                            "email VARCHAR(255) NOT NULL, " +
+                            "password VARCHAR(255) NOT NULL, " +
+                            "is_admin BOOLEAN DEFAULT FALSE, " +
+                            "balance NUMERIC DEFAULT 0" +
+                            ")");
 
 
                     // Create sequences for auto generating id's for members and sports
