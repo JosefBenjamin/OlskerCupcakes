@@ -22,7 +22,7 @@ public class AdminMapperTest {
 
     private static ConnectionPool connectionPool;
     private static UserMapper userMapper;
-
+// comment
     @BeforeAll
     public static void setUpClass() {
         try {
