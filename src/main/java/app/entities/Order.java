@@ -11,7 +11,11 @@ public class Order {
     private boolean isDone;
     private int orderLineId;
 
-    public Order(int orderId, int price, Timestamp time, int userID, int orderLineId) {
+    public Order(int orderId,
+                 int price,
+                 Timestamp time,
+                 int userID,
+                 int orderLineId) {
         this.orderId = orderId;
         this.price = price;
         this.time = time;

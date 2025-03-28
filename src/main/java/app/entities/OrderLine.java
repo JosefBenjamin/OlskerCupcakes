@@ -8,21 +8,16 @@ public class OrderLine {
     private int orderId;
     private int orderLineId;
 
-    public OrderLine(int topID, int botID, int quantity, int price, int orderId) {
+    public OrderLine(int topID,
+                     int botID,
+                     int quantity,
+                     int price,
+                     int orderId) {
         this.topId = topID;
         this.bottomId = botID;
         this.quantity = quantity;
         this.price = price;
         this.orderId = orderId;
-    }
-
-    public OrderLine(int topID, int bottomID, int quantity, int price, int orderId, int orderLineId) {
-        this.topId = topID;
-        this.bottomId = bottomID;
-        this.quantity = quantity;
-        this.price = price;
-        this.orderId = orderId;
-        this.orderLineId = orderLineId;
     }
 
     public int getOrderLineId(){

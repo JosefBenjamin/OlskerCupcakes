@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class ItemMapper
 {
@@ -36,7 +34,8 @@ public class ItemMapper
         return  cakeBottoms;
     } // getAllBottoms
 
-    public static CakeBottom getBottomById(ConnectionPool connectionPool, int bottomId) throws DatabaseException
+    public static CakeBottom getBottomById(ConnectionPool connectionPool,
+                                           int bottomId) throws DatabaseException
     { //Local attributes
         CakeBottom bottom           = null;
         String sql                  = "SELECT * FROM bottom WHERE bot_id = ?";
@@ -83,7 +82,8 @@ public class ItemMapper
         return  cakeTops;
     } // getAllToppings()
 
-    public static CakeTop getToppingById(ConnectionPool connectionPool, int toppingId) throws DatabaseException
+    public static CakeTop getToppingById(ConnectionPool connectionPool,
+                                         int toppingId) throws DatabaseException
     {   // Local attributes
         CakeTop topping             = null;
         String sql                  = "SELECT * FROM topping WHERE top_id = ?";
@@ -108,7 +108,8 @@ public class ItemMapper
         return topping;
     } // getToppingById()
 
-    public static CupcakePart getCupcakePartByID(boolean TRUEisTopping_FALSEisBottom, int ID, ConnectionPool pool) throws DatabaseException{
+    public static CupcakePart getCupcakePartByID(boolean TRUEisTopping_FALSEisBottom,
+                                                 int ID, ConnectionPool pool) throws DatabaseException{
      // Local attributes
         CupcakePart result          = null;
         String sqlPart1             = TRUEisTopping_FALSEisBottom ? "topping" : "bottom";
@@ -118,7 +119,7 @@ public class ItemMapper
         try (Connection con         = pool.getConnection();
              PreparedStatement ps   = con.prepareStatement(sql)){
 
-            // The ID is referring (top/bot)_id in the DB
+         // The ID is referring (top/bot)_id in the DB
             ps.setInt(1,ID);
             ResultSet rs            = ps.executeQuery();
             if(rs.next()){

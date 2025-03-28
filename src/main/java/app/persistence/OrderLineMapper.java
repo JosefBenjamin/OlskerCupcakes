@@ -11,7 +11,8 @@ import java.sql.Connection;
 
 public class OrderLineMapper {
 
-    public static List<OrderLine> getAllOrderLinesByOrderID(ConnectionPool pool, int orderID) throws DatabaseException{
+    public static List<OrderLine> getAllOrderLinesByOrderID(ConnectionPool pool,
+                                                            int orderID) throws DatabaseException{
         List<OrderLine> result = new ArrayList<>();
         String sql = "SELECT * FROM orderline WHERE order_id = ? ORDER BY order_id ASC";
 
@@ -33,7 +34,9 @@ public class OrderLineMapper {
         return result;
     }
 
-    public static List<OrderLine> getAllOrderLinesByCombo(int toppingID, int bottomID, ConnectionPool pool) throws DatabaseException{
+    public static List<OrderLine> getAllOrderLinesByCombo(int toppingID,
+                                                          int bottomID,
+                                                          ConnectionPool pool) throws DatabaseException{
         List<OrderLine> result = new ArrayList<>();
         String sql = "SELECT * FROM orderline WHERE top_id = ? AND bot_id = ? ORDER BY order_id asc";
 
