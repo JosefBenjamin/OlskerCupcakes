@@ -27,18 +27,43 @@
     </nav>
 </header>
 
-<h1>Log ind for at bestille cupcakes</h1>
+<h1>Øens bedste cupcakes! Vælg og bestil her:</h1>
 
-<form class="login-form" method="post">
-    <input type="email" name="email" placeholder="E-mail"/>
-    <input type="password" name="password" placeholder="Password"/>
+<form class="cupcake-form" method="post" action="/bestil">
 
-    <button type="submit" formaction="/login">Log ind</button>
+    <!-- TODO! Dynamic updating based on what is in the database - Price view on selections
+    
+    <!-- Dropdown for Bund -->
+    <label for="bund">Vælg bund:</label>
+    <select name="bund" id="bund">>
+        <option value="chokolade">Chokolade</option>
+        <option value="vanilje">Vanilje</option>
+        <option value="jordbær">Jordbær</option>
+    </select>
 
-    <div><p th:text="${message}"> </p></div>
+    <!-- Dropdown for Top -->
+    <label for="bund">Vælg top:</label>
+    <select name="top" id="top">
+        <option value="chokolade">Chokolade</option>
+        <option value="vanilje">Vanilje</option>
+        <option value="karamel">Karamel</option>
+    </select>
+
+    <!-- Antal -->
+    <label for="antal">Antal cupcakes:</label>
+    <input type="number" name="antal" id="antal" value="1" min="1" step="1" />
+
+    <!-- Bestil Knappen -->
+    <button type="submit">Bestil</button>
 </form>
 
-<p><a href="registeruser.html" th:href="@{/registeruser}">Eller opret bruger ➡ </a></p>
+<!-- Bekræftelse og knap vises når cupcake er tilføjet -->
+<div th:if="${cupcakeAdded}">
+    <p>Din cupcake er tilføjet til kurven! 🍰</p>
+    <form action="/cart" method="get">
+        <button type="submit">Gå til kurven</button>
+    </form>
+</div>
 
 <footer>
     <div class="footer-content">
