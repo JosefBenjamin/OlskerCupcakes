@@ -10,12 +10,12 @@
 
 <body>
 <header>
-    <a href="index.html" th:href="@{/}">
+    <a href="store.html" th:href="@{/}">
         <img src="../public/images/cupcakeheaderlogo.png" th:src="@{/images/cupcakeheader.png}" width="50%" />
     </a>
     <nav>
         <ul>
-            <li><a href="index.html" th:href="@{/}">Bestil Cupcakes</a></li>
+            <li><a href="store.html" th:href="@{/}">Bestil Cupcakes</a></li>
             <li><a href="login.html" th:href="@{/login}">Log ind</a></li>
             <li><a href="registeruser.html" th:href="@{/registeruser}">Opret bruger</a></li>
             <li>
@@ -29,7 +29,7 @@
 
 <h1>Opret en bruger for at bestille cupcakes</h1>
 
-<form class="login-from" method="post">
+<form class="login-form" method="post">
     <input type="email" name="email" placeholder="E-mail"/>
     <input type="password" name="password1" placeholder="Password" required minlength="2"/>
     <input type="password" name="password2" placeholder="Gentag password" required minlength="2"/>
