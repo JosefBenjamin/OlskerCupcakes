@@ -29,7 +29,7 @@ public class OrderLineMapper {
                 result.add(new OrderLine(olID, topID, botId, ol_price, quantity));
             }
         } catch (SQLException exc){
-            throw new DatabaseException("Was unable to fin")
+            throw new DatabaseException("Was unable to fin");
         }
         return result;
     }
