@@ -49,11 +49,50 @@ class OrderLineMapperTest {
 
 
                 // Create test-tables which copies the product structure without data
-                stmt.execute("CREATE TABLE test.orderline   AS (SELECT * FROM public.orderline) WITH NO DATA");
-                stmt.execute("CREATE TABLE test.orders      AS (SELECT * FROM public.orders)    WITH NO DATA");
-                stmt.execute("CREATE TABLE test.users       AS (SELECT * FROM public.users)     WITH NO DATA");
-                stmt.execute("CREATE TABLE test.bottom      AS (SELECT * FROM public.bottom)    WITH NO DATA");
-                stmt.execute("CREATE TABLE test.topping     AS (SELECT * FROM public.topping)   WITH NO DATA");
+
+
+                // Create orderline table
+                stmt.execute(   "CREATE TABLE IF NOT EXISTS test.orderline (" +
+                        "ol_id      SERIAL PRIMARY KEY, " +
+                        "top_id     INTEGER NOT NULL, " +
+                        "bot_id     INTEGER NOT NULL, " +
+                        "ol_price   INTEGER NOT NULL, " +
+                        "quantity   INTEGER NOT NULL," +
+                        "order_id   INTEGER NOT NULL" +
+                        ")");
+
+                // Create orders table
+                stmt.execute(   "CREATE TABLE IF NOT EXISTS test.orders (" +
+                        "order_id       SERIAL PRIMARY KEY, " +
+                        "total_price    INTEGER NOT NULL, " +
+                        "order_date     TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, " +
+                        "is_done        BOOLEAN DEFAULT FALSE, " +
+                        "user_id        INTEGER NOT NULL" +
+                        ")");
+
+                // Create users tables
+                stmt.execute(   "CREATE TABLE IF NOT EXISTS test.users (" +
+                        "user_id    SERIAL PRIMARY KEY, " +
+                        "email      VARCHAR(255) NOT NULL, " +
+                        "password   VARCHAR(255) NOT NULL, " +
+                        "is_admin   BOOLEAN DEFAULT FALSE, " +
+                        "balance    INTEGER DEFAULT 100" +
+                        ")");
+
+                // Create bottom table
+                stmt.execute(   "CREATE TABLE IF NOT EXISTS test.bottom (" +
+                        "bot_id     SERIAL PRIMARY KEY, " +
+                        "bot_name   VARCHAR(255) NOT NULL, " +
+                        "bot_price  INTEGER NOT NULL " +
+                        ")");
+
+
+                // Create topping table
+                stmt.execute(   "CREATE TABLE IF NOT EXISTS test.topping(" +
+                        "top_id     SERIAL PRIMARY KEY, " +
+                        "top_name   VARCHAR(255) NOT NULL, " +
+                        "top_price  INTEGER NOT NULL " +
+                        ")");
 
 
                 // Create sequences that auto generates IDs for the tables
@@ -90,49 +129,49 @@ class OrderLineMapperTest {
                 stmt.execute("TRUNCATE TABLE test.topping   CASCADE");
 
                 // Insert test data in orderline table
-                stmt.execute ("INSERT INTO test.orderline (ol_id, top_id, bot_id, ol_price, quantity, order_id) VALUES" +
-                        "('1','1','1','10','1','1')," +
-                        "('2','2','2','20','2','2')," +
-                        "('3','3','3','30','3','3')," +
-                        "('4','4','4','40','4','4')," +
-                        "('5','5','5','50','5','5')");
+                stmt.execute ("INSERT INTO test.orderline (top_id, bot_id, ol_price, quantity, order_id) VALUES" +
+                        "('1','1','10','1','1')," +
+                        "('2','2','20','2','2')," +
+                        "('3','3','30','3','3')," +
+                        "('4','4','40','4','4')," +
+                        "('5','5','50','5','5')");
 
 
 
                 // Insert test data in orders table
-                stmt.execute("INSERT INTO test.orders (order_id,  total_price, order_date, is_done, user_id) VALUES" +
-                        "('1','5', '2025-03-27 14:37:52.123456','true', '1')," +
-                        "('2','5', '2025-03-27 14:37:52.123456','true', '2')," +
-                        "('3','5', '2025-03-27 14:37:52.123456','true', '3')," +
-                        "('4','5', '2025-03-27 14:37:52.123456','true', '4')," +
-                        "('5','5', '2025-03-27 14:37:52.123456','true', '5')");
+                stmt.execute("INSERT INTO test.orders (  total_price, order_date, is_done, user_id) VALUES" +
+                        "('5', '2025-03-27 14:37:52.123456','true', '1')," +
+                        "('5', '2025-03-27 14:37:52.123456','true', '2')," +
+                        "('5', '2025-03-27 14:37:52.123456','true', '3')," +
+                        "('5', '2025-03-27 14:37:52.123456','true', '4')," +
+                        "('5', '2025-03-27 14:37:52.123456','true', '5')");
 
 
                 // Insert test data in users table
-                stmt.execute("INSERT INTO test.users (user_id, email,password,is_admin,balance) VALUES" +
-                        "('1','user1@email.com','password1','true','1000')," +
-                        "('2','user2@email.com','password2','false','100')," +
-                        "('3','user3@email.com','password3','false','100')," +
-                        "('4','user4@email.com','password4','false','100')," +
-                        "('5','user5@email.com','password5','false','100')");
+                stmt.execute("INSERT INTO test.users ( email,password,is_admin,balance) VALUES" +
+                        "('user1@email.com','password1','true','1000')," +
+                        "('user2@email.com','password2','false','100')," +
+                        "('user3@email.com','password3','false','100')," +
+                        "('user4@email.com','password4','false','100')," +
+                        "('user5@email.com','password5','false','100')");
 
 
                 // Insert test data in topping table
-                stmt.execute("INSERT INTO test.topping (top_id, top_name, top_price) VALUES" +
-                        "('1','Chocolate','5')," +
-                        "('2','Vanilla','5')," +
-                        "('3','Strawberry','5')," +
-                        "('4','Blueberry','5')," +
-                        "('5','Raspberry','5')");
+                stmt.execute("INSERT INTO test.topping ( top_name, top_price) VALUES" +
+                        "('Chocolate','5')," +
+                        "('Vanilla','5')," +
+                        "('Strawberry','5')," +
+                        "('Blueberry','5')," +
+                        "('Raspberry','5')");
 
 
                 // Insert test data in bottom table
-                stmt.execute("INSERT INTO test.bottom (bot_id, bot_name, bot_price) VALUES" +
-                        "('1','Chocolate','5')," +
-                        "('2','Vanilla','5')," +
-                        "('3','Strawberry','5')," +
-                        "('4','Blueberry','5')," +
-                        "('5','Raspberry','5')");
+                stmt.execute("INSERT INTO test.bottom ( bot_name, bot_price) VALUES" +
+                        "('Chocolate','5')," +
+                        "('Vanilla','5')," +
+                        "('Strawberry','5')," +
+                        "('Blueberry','5')," +
+                        "('Raspberry','5')");
 
             }
         } catch (SQLException exc){
@@ -149,6 +188,7 @@ class OrderLineMapperTest {
         int price = 1;
         int orderID = 10;
         try{
+
             OrderLineMapper.createOrderLine(pool, topID, botID, quantity, price, orderID);
         } catch (DatabaseException exc){
             fail("Database setup failed in createNewOrderLine");
