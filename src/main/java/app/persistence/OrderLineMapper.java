@@ -70,7 +70,7 @@ public class OrderLineMapper {
                 int botID       = rs.getInt("bot_id");
                 int quantity    = rs.getInt("quantity");
                 int price       = rs.getInt("ol_price");
-                result.add(new OrderLine(topID,botID, quantity, price, orderID));
+                result.add(new OrderLine(topID,botID, quantity, price, orderID)); 
             }
 
         } catch(SQLException exc){
