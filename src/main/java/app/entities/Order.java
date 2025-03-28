@@ -4,12 +4,12 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Order {
-    private int orderId;
-    private int userId;
-    private int price;
-    private Timestamp time;
-    private boolean isDone;
-    private int orderLineId;
+    private int         orderId;
+    private int         userId;
+    private int         price;
+    private Timestamp   time;
+    private boolean     isDone;
+    private int         orderLineId;
 
     public Order(int orderId,
                  int price,

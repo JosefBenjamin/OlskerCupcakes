@@ -6,7 +6,6 @@ public class OrderLine {
     private int quantity;
     private int price;
     private int orderId;
-    private int orderLineId;
 
     public OrderLine(int topID,
                      int botID,
@@ -20,9 +19,6 @@ public class OrderLine {
         this.orderId = orderId;
     }
 
-    public int getOrderLineId(){
-        return this.orderLineId;
-    }
 
     public int getTopId() {
         return this.topId;
