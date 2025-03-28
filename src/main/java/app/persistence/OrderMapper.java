@@ -36,7 +36,7 @@ public class OrderMapper {
     public static Order getLatestOrderByUserID(int userID, ConnectionPool pool) throws DatabaseException {
         // Local attribute
         Order result                = null;
-        String sql                  = "SELECT * FROM orders WHERE order_id = ?";
+        String sql                  = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
 
         try(Connection con          = pool.getConnection();
             PreparedStatement ps    = con.prepareStatement(sql)){
