@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserMapperTest {
+public class AdminMapperTest {
 
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
@@ -72,10 +72,10 @@ public class UserMapperTest {
                 stmt.execute("SELECT setval('test.user_id', COALESCE((SELECT MAX(user_id) FROM test.users), 1), false)");
                 // Insert rows
                 stmt.execute("INSERT INTO test.users (email, password, is_admin, balance) " +
-                        "VALUES ('example@example.org', '1234', false, 0), " +
-                        "('something@example.org', '2345', false, 0), " +
-                        "('random@example.org', '1234', false, 0), " +
-                        "('johan@example.org', '1234', false, 0)");
+                        "VALUES ('example@example.org', 1234, false, 0), " +
+                        "('something@example.org', 2345, false, 0), " +
+                        "('random@example.org', 1234, false, 0), " +
+                        "('johan@example.org', 1234, false, 0)");
 
                 // Set sequence to continue from the largest member_id
                 stmt.execute("SELECT setval('test.user_id', COALESCE((SELECT MAX(user_id)+1 FROM test.users), 1), false)");
@@ -93,47 +93,23 @@ public class UserMapperTest {
     }
 
     @Test
-    void create() {
+    void testNewBalance() throws SQLException { //Test is successful
         List<User> users = null;
+        try (Connection connection = connectionPool.getConnection();
+             Statement stmt = connection.createStatement()) {
+            // Set balance of the first user (user_id = 1 or by email)
+            stmt.execute("UPDATE test.users SET balance = 100 WHERE email = 'example@example.org'");
+        }
         try {
             users = userMapper.getAllUsers(connectionPool);
         } catch (DatabaseException e) {
             throw new RuntimeException(e);
         }
-        assertEquals(4, users.size());
-        //Change either expected size to 4 or more,
-        // Look at later
-        // assertEquals(users.get(0), new User('example@example.org', 1234, false, 0));
 
+        assertEquals(100, users.get(0).getBalance());
     }
 
 
-    @Test
-    void testLogin() {
-        try {
-            User user = userMapper.login("example@example.org", "1234", connectionPool);
-            assertNotNull(user);
-            assertEquals("example@example.org", user.getEmail());
-        } catch (DatabaseException e) {
-            fail("Login should have succeeded");
-        }
-    }
-
-
-    @Test
-    void getAllProfiles() {
-        List<User> users = null;
-        try {
-            users = userMapper.getAllUsers(connectionPool);
-        } catch (DatabaseException e) {
-            throw new RuntimeException(e);
-        }
-        assertEquals(4, users.size());
-        //Change either expected size to 4 or more,
-        // Look at later
-        // assertEquals(users.get(0), new User('example@example.org', 1234, false, 0));
-
-    }
 
 
 }
