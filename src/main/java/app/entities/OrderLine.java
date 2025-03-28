@@ -25,6 +25,10 @@ public class OrderLine {
         this.orderLineId = orderLineId;
     }
 
+    public int getOrderLineId(){
+        return this.orderLineId;
+    }
+
     public int getTopId() {
         return this.topId;
     }
