@@ -56,29 +56,6 @@ public class OrderLineMapper {
         return result;
     }
 
-    public static List<OrderLine> getOrderLineByID(int orderID, ConnectionPool pool) throws DatabaseException{
-        List<OrderLine> result = new ArrayList<>();
-        String sql  ="SELECT * FROM orderline WHERE order_id = ?";
-
-        try(Connection con = pool.getConnection();
-            PreparedStatement ps =con.prepareStatement(sql)){
-
-            ps.setInt(1,orderID);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                int topID       = rs.getInt("top_id");
-                int botID       = rs.getInt("bot_id");
-                int quantity    = rs.getInt("quantity");
-                int price       = rs.getInt("ol_price");
-                result.add(new OrderLine(topID,botID, quantity, price, orderID)); 
-            }
-
-        } catch(SQLException exc){
-            throw new DatabaseException("Was unable to connect to database; getOrderLineByID", exc);
-        }
-        return result;
-
-    }
 
 
 }
