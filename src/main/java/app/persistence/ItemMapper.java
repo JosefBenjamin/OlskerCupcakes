@@ -128,10 +128,10 @@ public class ItemMapper
 
                 if(TRUEisTopping_FALSEisBottom){
                     //Returns a CakeTop
-                    result = new CakeTop(id, name, price);
+                    result          = new CakeTop(id, name, price);
                 } else{
                     //Returns a CakeBottom
-                    result = new CakeBottom(id,name, price);
+                    result          = new CakeBottom(id,name, price);
                 } // if-else (inner)
             } // if (outer)
         } catch (SQLException exc){
