@@ -40,7 +40,7 @@ public class UserMapperTest {
                             "email VARCHAR(255) NOT NULL, " +
                             "password VARCHAR(255) NOT NULL, " +
                             "is_admin BOOLEAN DEFAULT FALSE, " +
-                            "balance NUMERIC DEFAULT 0" +
+                            "balance INTEGER DEFAULT 0" +
                             ")");
 
 
