@@ -14,7 +14,7 @@ public class UserMapper {
 
 
     public static User login(String userEmail, String userPassword, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "select * from users where username=? and password=?";
+        String sql = "select * from users where email =? and password=?";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -25,10 +25,10 @@ public class UserMapper {
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                int id = rs.getInt("userId");
+                int id = rs.getInt("user_id");
                 String email = rs.getString("email");
                 String password = rs.getString("password");
-                boolean isAdmin = rs.getBoolean("isAdmin");
+                boolean isAdmin = rs.getBoolean("is_admin");
                 return new User(id, email, password, isAdmin);
             } else {
                 throw new DatabaseException("Failed to login, please try again!");
