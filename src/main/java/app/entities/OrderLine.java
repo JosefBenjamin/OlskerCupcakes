@@ -6,6 +6,7 @@ public class OrderLine {
     private int quantity;
     private int price;
     private int orderId;
+    private int olID;
 
     public OrderLine(int topID, int botID, int quantity, int price, int orderId) {
         this.topId = topID;
@@ -14,6 +15,16 @@ public class OrderLine {
         this.price = price;
         this.orderId = orderId;
     }
+
+    public OrderLine (int olID, int topID, int botID, int quantity, int price, int orderId){
+        this.olID = olID;
+        this.topId = topID;
+        this.bottomId = botID;
+        this.quantity = quantity;
+        this.price = price;
+        this.orderId = orderId;
+    }
+
 
     public int getTopId() {
         return this.topId;
