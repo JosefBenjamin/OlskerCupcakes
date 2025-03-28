@@ -46,14 +46,10 @@ public class Order {
         return isDone;
     }
 
-    public int getOrderLineId() {
-        return orderLineId;
-    }
-
     @Override
     public String toString() {
         String result;
-        result = "Order ID: " + this.orderId + " \nPrice: " + this.price + "\nTime: " + this.time + "\nIs done: " + this.isDone + "\nUser ID: " + this.userId + "\nOrder line ID: " + this.orderLineId;
+        result = "Order ID: " + this.orderId + " \nPrice: " + this.price + "\nTime: " + this.time + "\nIs done: " + this.isDone + "\nUser ID: " + this.userId;
         return result;
     }
 }
