@@ -134,5 +134,31 @@ public class ItemMapper
         return result;
     }
 
+    public static List<CupcakePart> getAllCupcakeParts(boolean TRUEisToppingFALSEisBottom, ConnectionPool pool) throws DatabaseException{
+        List<CupcakePart> result = new ArrayList<>();
+        String sqlPart1 = TRUEisToppingFALSEisBottom ? "topping" : "bottom";
+        String sqlPart2 = TRUEisToppingFALSEisBottom ? "top" : "bot";
+        String sql = "SELECT * FROM " + sqlPart1 + " WHERE " + sqlPart2 + "_id = ?";
 
+        try(Connection con = pool.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)){
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                if(TRUEisToppingFALSEisBottom){
+                    result.add(new CakeTop(     rs.getInt(sqlPart2+"_id"),
+                                                rs.getString(sqlPart2+"_name"),
+                                                rs.getInt(sqlPart2+"_price")));
+                }else{
+                    result.add(new CakeBottom(  rs.getInt(sqlPart2+"_id"),
+                                                rs.getString(sqlPart2+"_name"),
+                                                rs.getInt(sqlPart2+"_price")));
+                }
+            }
+        } catch (SQLException exc){
+            throw new DatabaseException("Error while getting " + sqlPart1 + " part", exc);
+        }
+
+        return result;
+    }
 }
