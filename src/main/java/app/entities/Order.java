@@ -9,7 +9,6 @@ public class Order {
     private int         price;
     private Timestamp   time;
     private boolean     isDone;
-    private int         orderLineId;
 
     public Order(int orderId,
                  int price,
@@ -21,7 +20,6 @@ public class Order {
         this.time = time;
         this.isDone = false;
         this.userId = userID;
-        this.orderLineId = orderLineId;
     }
 
     public void changeIsDoneStatus(){
