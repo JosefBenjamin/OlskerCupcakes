@@ -1,7 +1,6 @@
 package app.persistence;
 
-import app.entities.CakeBottom;
-import app.entities.CakeTop;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 
 import java.sql.Connection;
@@ -10,6 +9,8 @@ import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ItemMapper
 {
@@ -102,4 +103,36 @@ public class ItemMapper
         }
         return topping;
     }
+
+    public static CupcakePart getCupcakePartByID(boolean TRUEisToppingFALSEisBottom, int partID, ConnectionPool pool) throws DatabaseException{
+        CupcakePart result= null;
+        String sqlPart1 = TRUEisToppingFALSEisBottom ? "topping" : "bottom";
+        String sqlPart2 = TRUEisToppingFALSEisBottom ? "top" : "bot";
+        String sql = "SELECT * FROM " + sqlPart1 + " WHERE " + sqlPart2 + "_id = ?";
+
+        try (Connection con = pool.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)){
+
+            ps.setInt(1,partID);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                int id      = rs.getInt(sqlPart2+"_id");
+                String name = rs.getString(sqlPart2+"_name");
+                int price   = rs.getInt(sqlPart2+"_price");
+
+                if(TRUEisToppingFALSEisBottom){
+                    // CakeTop
+                    result = new CakeTop(id, name, price);
+                } else{
+                    //CakeBottom
+                    result = new CakeBottom(id,name, price);
+                }
+            }
+        } catch (SQLException exc){
+            throw new DatabaseException("Error while getting " + sqlPart1 + " part", exc);
+        }
+        return result;
+    }
+
+
 }
