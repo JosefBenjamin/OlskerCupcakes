@@ -14,8 +14,8 @@ public class Order {
     public Order(int orderId,
                  int price,
                  Timestamp time,
-                 int userID,
-                 int orderLineId) {
+                 int userID) {
+
         this.orderId = orderId;
         this.price = price;
         this.time = time;
