@@ -11,9 +11,9 @@ import java.sql.Connection;
 
 public class OrderLineMapper {
 
-    public static List<OrderLine> getAllOrderLines(ConnectionPool pool, int orderID) throws DatabaseException{
+    public static List<OrderLine> getAllOrderLinesByOrderID(ConnectionPool pool, int orderID) throws DatabaseException{
         List<OrderLine> result = new ArrayList<>();
-        String sql = "SELECT * FROM orderline WHERE order_id = ?";
+        String sql = "SELECT * FROM orderline WHERE order_id = ? ORDER BY order_id ASC";
 
         try(Connection con = pool.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)
@@ -29,8 +29,32 @@ public class OrderLineMapper {
                 result.add(new OrderLine(olID, topID, botId, ol_price, quantity));
             }
         } catch (SQLException exc){
-            throw new DatabaseException("Was unable to connect to database", exc);
+            throw new DatabaseException("Was unable to connect to database: getAllOrderLinesByID", exc);
         }
         return result;
     }
+
+    public static List<OrderLine> getAllOrderLinesByCombo(int toppingID, int bottomID, ConnectionPool pool) throws DatabaseException{
+        List<OrderLine> result = new ArrayList<>();
+        String sql = "SELECT * FROM orderline WHERE top_id = ? AND bot_id = ? ORDER BY order_id asc";
+
+        try(Connection con = pool.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)){
+
+            ps.setInt(1,toppingID);
+            ps.setInt(2,bottomID);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                int orderID = rs.getInt("order_id");
+                int orderLinePrice = rs.getInt("ol_price");
+                int orderLineQuantity = rs.getInt("quantity");
+                result.add(new OrderLine(toppingID, bottomID, orderLineQuantity, orderLinePrice, orderID));
+            }
+        } catch (SQLException exc){
+            throw new DatabaseException("Was unable to connect to database; getAllOrderLinesByCombo", exc);
+        }
+
+        return result;
+    }
+
 }
