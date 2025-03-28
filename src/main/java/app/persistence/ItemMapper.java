@@ -142,19 +142,20 @@ public class ItemMapper
 
     public static List<CupcakePart> getAllCupcakeParts(boolean TRUEisTopping_FALSEisBottom, ConnectionPool pool) throws DatabaseException{
      // Local attributes
-        List<CupcakePart> result    = new ArrayList<>();
-        String sqlPart1             = TRUEisTopping_FALSEisBottom ? "topping" : "bottom";
-        String sqlPart2             = TRUEisTopping_FALSEisBottom ? "top" : "bot";
-        String sql                  = "SELECT * FROM " + sqlPart1 + " WHERE " + sqlPart2 + "_id = ?";
+        List<CupcakePart> result                = new ArrayList<>();
+        String sqlPart1                         = TRUEisTopping_FALSEisBottom ? "topping" : "bottom";
+        String sqlPart2                         = TRUEisTopping_FALSEisBottom ? "top" : "bot";
+        String sql                              = "SELECT * FROM " + sqlPart1 + " WHERE " + sqlPart2 + "_id = ?";
 
-        try(Connection con          = pool.getConnection();
-            PreparedStatement ps    = con.prepareStatement(sql)){
+        try(Connection con                      = pool.getConnection();
+            PreparedStatement ps                = con.prepareStatement(sql)){
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 if(TRUEisTopping_FALSEisBottom){
                     // Add a CakeTop to the result List
-                    result.add(new CakeTop(     rs.getInt(sqlPart2+"_id"),                                   // Retrieves top_id from DB & give as Constructor parameter
+                    result.add(
+                            new CakeTop(        rs.getInt(sqlPart2+"_id"),                                   // Retrieves top_id from DB & give as Constructor parameter
                                                 rs.getString(sqlPart2+"_name"),                              // Retrieves top_name from DB & give as Constructor parameter
                                                 rs.getInt(sqlPart2+"_price")));                              // Retrieves top_price from DB & give as Constructor parameter
                 }else{
