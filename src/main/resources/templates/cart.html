@@ -15,7 +15,7 @@
     </a>
     <nav>
         <ul>
-            <li><a href="store.html" th:href="@{/store}">Bestil Cupcakes</a></li>
+            <li><a href="store.html" th:href="@{/}">Bestil Cupcakes</a></li>
             <li><a href="login.html" th:href="@{/login}">Log ind</a></li>
             <li><a href="registeruser.html" th:href="@{/registeruser}">Opret bruger</a></li>
             <li>
@@ -27,7 +27,35 @@
     </nav>
 </header>
 
-<h1>Log ind for at bestille cupcakes</h1>
+<h1>Din kurv</h1>
+
+<div th:if="${cart == null || cart.isEmpty()}">
+    <p>Din kurv er tom.</p>
+</div>
+
+<div th:if="${cart != null && !cart.isEmpty()}">
+    <table>
+        <thead>
+        <tr>
+            <th>Bund</th>
+            <th>Top</th>
+            <th>Antal</th>
+            <th>Pris</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${cart}">
+            <td th:text="${item.base}"></td>
+            <td th:text="${item.topping}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="${item.price}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <p>Samlet pris: <span th:text="${totalPrice}"></span> DKK</p>
+</div>
+
+<h1>Log ind for at gennemføre betalingen</h1>
 
 <form class="login-form" method="post">
     <input type="email" name="email" placeholder="E-mail"/>
@@ -39,6 +67,10 @@
 </form>
 
 <p><a href="registeruser.html" th:href="@{/registeruser}">Eller opret bruger ➡ </a></p>
+
+
+<button onclick="window.location.href='/checkout'">Gå til betaling</button>
+
 
 <footer>
     <div class="footer-content">
