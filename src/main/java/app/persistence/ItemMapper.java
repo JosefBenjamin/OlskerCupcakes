@@ -104,10 +104,10 @@ public class ItemMapper
         return topping;
     }
 
-    public static CupcakePart getCupcakePartByID(boolean TRUEisToppingFALSEisBottom, int partID, ConnectionPool pool) throws DatabaseException{
+    public static CupcakePart getCupcakePartByID(boolean TRUEisTopping_FALSEisBottom, int partID, ConnectionPool pool) throws DatabaseException{
         CupcakePart result= null;
-        String sqlPart1 = TRUEisToppingFALSEisBottom ? "topping" : "bottom";
-        String sqlPart2 = TRUEisToppingFALSEisBottom ? "top" : "bot";
+        String sqlPart1 = TRUEisTopping_FALSEisBottom ? "topping" : "bottom";
+        String sqlPart2 = TRUEisTopping_FALSEisBottom ? "top" : "bot";
         String sql = "SELECT * FROM " + sqlPart1 + " WHERE " + sqlPart2 + "_id = ?";
 
         try (Connection con = pool.getConnection();
@@ -120,7 +120,7 @@ public class ItemMapper
                 String name = rs.getString(sqlPart2+"_name");
                 int price   = rs.getInt(sqlPart2+"_price");
 
-                if(TRUEisToppingFALSEisBottom){
+                if(TRUEisTopping_FALSEisBottom){
                     // CakeTop
                     result = new CakeTop(id, name, price);
                 } else{
@@ -134,10 +134,10 @@ public class ItemMapper
         return result;
     }
 
-    public static List<CupcakePart> getAllCupcakeParts(boolean TRUEisToppingFALSEisBottom, ConnectionPool pool) throws DatabaseException{
+    public static List<CupcakePart> getAllCupcakeParts(boolean TRUEisTopping_FALSEisBottom, ConnectionPool pool) throws DatabaseException{
         List<CupcakePart> result = new ArrayList<>();
-        String sqlPart1 = TRUEisToppingFALSEisBottom ? "topping" : "bottom";
-        String sqlPart2 = TRUEisToppingFALSEisBottom ? "top" : "bot";
+        String sqlPart1 = TRUEisTopping_FALSEisBottom ? "topping" : "bottom";
+        String sqlPart2 = TRUEisTopping_FALSEisBottom ? "top" : "bot";
         String sql = "SELECT * FROM " + sqlPart1 + " WHERE " + sqlPart2 + "_id = ?";
 
         try(Connection con = pool.getConnection();
@@ -145,7 +145,7 @@ public class ItemMapper
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                if(TRUEisToppingFALSEisBottom){
+                if(TRUEisTopping_FALSEisBottom){
                     result.add(new CakeTop(     rs.getInt(sqlPart2+"_id"),
                                                 rs.getString(sqlPart2+"_name"),
                                                 rs.getInt(sqlPart2+"_price")));
