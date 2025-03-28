@@ -20,7 +20,7 @@ public class UserMapperTest {
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=test";
     private static final String DB = "olskercupcakes";
 
-    private static ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
+    private static ConnectionPool connectionPool;
     private static UserMapper userMapper;
 
     @BeforeAll
