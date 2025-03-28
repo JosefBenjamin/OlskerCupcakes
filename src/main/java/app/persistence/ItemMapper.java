@@ -47,9 +47,9 @@ public class ItemMapper
 
             if(rs.next())
             {
-             int id  = rs.getInt("bottom_id");
-             String name = rs.getString("bottom_name");
-             int price = rs.getInt("bottom_price");
+             int id  = rs.getInt("bot_id");
+             String name = rs.getString("bot_name");
+             int price = rs.getInt("bot_price");
              bottom = new CakeBottom(id, name, price);
             }
         } catch (SQLException e)
@@ -76,5 +76,30 @@ public class ItemMapper
             throw new DatabaseException("Error while getting all toppings", e);
         }
         return  cakeTops;
+    }
+
+    public static CakeTop getToppingById(ConnectionPool connectionPool, int toppingId) throws DatabaseException {
+
+        CakeTop topping = null;
+        String sql = "SELECT * FROM topping WHERE top_id = ?";
+
+        try(Connection connection = connectionPool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql))
+        {
+            ps.setInt(1, toppingId);
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+            {
+             int id  = rs.getInt("top_id");
+             String name = rs.getString("top_name");
+             int price = rs.getInt("top_price");
+             topping = new CakeTop(id, name, price);
+            }
+        } catch (SQLException e)
+        {
+            throw new DatabaseException("Error while getting topping by id", e);
+        }
+        return topping;
     }
 }
