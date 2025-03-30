@@ -20,6 +20,14 @@ public class Order {
         this.orderLineId = orderLineId;
     }
 
+    public Order(int orderId, int userId, int price, Timestamp time, boolean isDone) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.price = price;
+        this.time = time;
+        this.isDone = isDone;
+    }
+
     public void changeIsDoneStatus(){
         this.isDone = !this.isDone;
     }
