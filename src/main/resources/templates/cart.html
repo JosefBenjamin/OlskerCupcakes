@@ -55,22 +55,20 @@
     <p>Samlet pris: <span th:text="${totalPrice}"></span> DKK</p>
 </div>
 
-<h1>Log ind for at gennemføre betalingen</h1>
+<div th:if="${loggedIn}">
+    <p>Du er logget ind som: <span th:text="${username}"></span></p>
+    <button onclick="window.location.href='/order_confirmed'">Bestil</button>
+</div>
 
-<form class="login-form" method="post">
-    <input type="email" name="email" placeholder="E-mail"/>
-    <input type="password" name="password" placeholder="Password"/>
-
-    <button type="submit" formaction="/login">Log ind</button>
-
-    <div><p th:text="${message}"> </p></div>
-</form>
-
-<p><a href="registeruser.html" th:href="@{/registeruser}">Eller opret bruger ➡ </a></p>
-
-
-<button onclick="window.location.href='/checkout'">Gå til betaling</button>
-
+<div th:if="${not loggedIn}">
+    <p>Log ind for at gennemføre din bestilling:</p>
+    <form method="post" th:action="@{/login}">
+        <input type="email" name="email" placeholder="E-mail" required/>
+        <input type="password" name="password" placeholder="Password" required/>
+        <button type="submit">Log ind</button>
+    </form>
+    <p><a href="registeruser.html" th:href="@{/registeruser}">Opret en konto</a></p>
+</div>
 
 <footer>
     <div class="footer-content">
