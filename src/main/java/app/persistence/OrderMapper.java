@@ -3,14 +3,15 @@ package app.persistence;
 import app.entities.Order;
 import app.entities.User;
 import app.exceptions.DatabaseException;
-
 import java.sql.*;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.ArrayList;
 
 public class OrderMapper {
 
-    public static Order getAnOrder(String email, ConnectionPool connectionPool) throws DatabaseException {
+  
+      public static Order getAnOrder(String email, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT * FROM orders " +
                 "JOIN users ON orders.user_id = users.user_id " +
                 "WHERE email =?";
@@ -37,32 +38,56 @@ public class OrderMapper {
             throw new DatabaseException("Something wrong with the database", e.getCause());
         }
     }
+  
+    public static Order getOrderByOrderLineID(int orderID,
+                                              ConnectionPool pool) throws DatabaseException {
+      //Local attribute
+        Order result                = null;
+        String sql                  = "SELECT * FROM orders WHERE order_id = ?";
 
-    public static void createuser(String userEmail, String userPassword, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "insert into users (username, password) values (?,?)";
+        try(Connection con          = pool.getConnection();
+            PreparedStatement ps    = con.prepareStatement(sql)){
 
-        try (
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
-            ps.setString(1, userEmail);
-            ps.setString(2, userPassword);
-
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected != 1) {
-                throw new DatabaseException("Failed to create a user, please try again!");
+            ps.setInt(1,orderID);
+            ResultSet rs            = ps.executeQuery();
+            if (rs.next()){
+                int price           = rs.getInt("total_price");
+                Timestamp date      = rs.getTimestamp("order_date");
+                int userID          = rs.getInt("user_id");
+                result              = new Order(orderID, price, date, userID);
             }
-        } catch (SQLException e) {
-            String msg = "An error occurred try agian!";
-            if (e.getMessage().startsWith("ERROR: duplicate key value ")) {
-                msg = "The email is already in use, please use another or login.";
-            }
-            throw new DatabaseException(msg, e.getCause());
+        } catch (SQLException exc){
+            throw new DatabaseException(exc.getMessage());
         }
+
+        return result;
     }
 
-    public List<Order> getAllOrders(ConnectionPool connectionPool) throws DatabaseException {
+    public static Order getLatestOrderByUserID(int userID,
+                                               ConnectionPool pool) throws DatabaseException {
+        // Local attribute
+        Order result                = null;
+        String sql                  = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
+
+        try(Connection con          = pool.getConnection();
+            PreparedStatement ps    = con.prepareStatement(sql)){
+
+            ps.setInt(1,userID);
+            ResultSet rs            = ps.executeQuery();
+            if (rs.next()){
+                int price           = rs.getInt("total_price");
+                Timestamp date      = rs.getTimestamp("order_date");
+                int orderID          = rs.getInt("order_id");
+                result              = new Order(orderID, price, date, userID);
+            }
+        } catch (SQLException exc){
+            throw new DatabaseException(exc.getMessage());
+        }
+
+        return result;
+    }
+  
+      public List<Order> getAllOrders(ConnectionPool connectionPool) throws DatabaseException {
 
         List<Order> orderList = new ArrayList<>();
 
@@ -93,4 +118,93 @@ public class OrderMapper {
         return orderList;
     }
 
+
+    public List<Order> getAllOrdersByUserID(int userID,
+                                            ConnectionPool pool) throws DatabaseException {
+        // Local attributes
+        List<Order> result          = new ArrayList<>();
+        String sql                  = "SELECT * FROM orders WHERE user_id = ?";
+
+        try (Connection con         = pool.getConnection();
+             PreparedStatement ps   = con.prepareStatement(sql)) {
+
+            ps.setInt(1,userID);
+            ResultSet rs            = ps.executeQuery();
+            while(rs.next()){
+                int orderID         = rs.getInt("order_id");
+                int price           = rs.getInt("total_price");
+                Timestamp date      = rs.getTimestamp("order_date");
+                result.add(new Order(orderID, price, date, userID));
+            } // while
+        } catch ( SQLException exc){
+            throw new DatabaseException(exc.getMessage());
+        } // catch
+        return result;
+    }
+
+    public List<Order> getAllNotDoneOrders(ConnectionPool pool) throws DatabaseException {
+        List<Order> result          = new ArrayList<>();
+        String sql                  = "SELECT * FROM orders WHERE is_done = false ORDER BY order_date DESC";
+        try (Connection con         = pool.getConnection();
+             PreparedStatement ps   = con.prepareStatement(sql)){
+
+            ResultSet rs            = ps.executeQuery();
+            while(rs.next()){
+                int orderID         = rs.getInt("order_id");
+                int price           = rs.getInt("total_price");
+                Timestamp date      = rs.getTimestamp("order_date");
+                int userID          = rs.getInt("user_id");
+                result.add(new Order(orderID, price, date, userID));
+            }
+        } catch (SQLException exc){
+            throw new DatabaseException(exc.getMessage());
+        }
+
+        return result;
+    }
+
+    public List<Order> getAllDoneOrders(ConnectionPool pool) throws DatabaseException {
+        List<Order> result          = new ArrayList<>();
+        String sql                  = "SELECT * FROM orders WHERE is_done = true ORDER BY order_date DESC";
+        try (Connection con         = pool.getConnection();
+             PreparedStatement ps   = con.prepareStatement(sql)){
+
+            ResultSet rs            = ps.executeQuery();
+            while(rs.next()){
+                int orderID         = rs.getInt("order_id");
+                int price           = rs.getInt("total_price");
+                Timestamp date      = rs.getTimestamp("order_date");
+                int userID          = rs.getInt("user_id");
+                result.add(new Order(orderID, price, date, userID));
+            }
+        } catch (SQLException exc){
+            throw new DatabaseException(exc.getMessage());
+        }
+
+        return result;
+    }
+  
+      public static void createuser(String userEmail, String userPassword, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "insert into users (username, password) values (?,?)";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setString(1, userEmail);
+            ps.setString(2, userPassword);
+
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new DatabaseException("Failed to create a user, please try again!");
+            }
+        } catch (SQLException e) {
+            String msg = "An error occurred try agian!";
+            if (e.getMessage().startsWith("ERROR: duplicate key value ")) {
+                msg = "The email is already in use, please use another or login.";
+            }
+            throw new DatabaseException(msg, e.getCause());
+        }
+    }
 }
