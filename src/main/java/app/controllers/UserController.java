@@ -24,7 +24,7 @@ public class UserController {
 
         if(password1.equals(password2)){
             try {
-                UserMapper.createuser(email, password1, connectionPool);
+                UserMapper.createUser(email, password1, connectionPool);
                 ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + email +
                         " Nu skal du logge på.");
                 ctx.render("login.html");
