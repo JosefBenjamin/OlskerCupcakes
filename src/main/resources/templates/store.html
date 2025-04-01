@@ -15,11 +15,26 @@
     </a>
     <nav>
         <ul>
-            <li><a href="store.html" th:href="@{/}">Bestil Cupcakes</a></li>
-            <li><a href="login.html" th:href="@{/login}">Log ind</a></li>
-            <li><a href="createuser.html" th:href="@{/createuser}">Opret bruger</a></li>
-            <li>
-                <a href="cart.html" th:href="@{/cart}">
+            <li><a href="/store">Bestil Cupcakes</a></li>
+
+            <!-- Not logged in -->
+            <li th:if="${currentUser == null}">
+                <a href="/login">Log ind</a>
+            </li>
+            <li th:if="${currentUser == null}">
+                <a href="/createuser">Opret bruger</a>
+            </li>
+
+            <!-- Logged in -->
+            <li th:if="${currentUser != null}">
+                <span th:text="'Velkommen, ' + ${currentUser.email}"></span>
+                <a href="/logout">Log ud</a>
+            </li>
+            <li th:if="${currentUser != null}">
+                <a href="/profile">Vis profil</a> <!-- Add this route in controller -->
+            </li>
+            <li th:if="${currentUser != null}">
+                <a href="/cart" th:href="@{/cart}">
                     <img src="../public/images/shopping_basket.png" th:src="@{/images/shopping_basket.png}" alt="Indkøbskurv" width="20" />
                 </a>
             </li>
@@ -29,7 +44,7 @@
 
 <h1>Øens bedste cupcakes! Vælg og bestil her:</h1>
 
-<form class="cupcake-form" method="post" action="/bestil">
+<form class="cupcake-form" method="post" action="/add-to-basket">
 
     <!-- TODO! Dynamic updating based on what is in the database - Price view on selections -->
     
@@ -54,12 +69,13 @@
     <input type="number" name="antal" id="antal" value="1" min="1" step="1" />
 
     <!-- Bestil Knappen -->
-    <button type="submit">Bestil</button>
+    <button type="submit">Add to basket</button>
 </form>
 
 <!-- Bekræftelse og knap vises når cupcake er tilføjet -->
 <div th:if="${cupcakeAdded}">
-    <p>Din cupcake er tilføjet til kurven! 🍰</p>
+    <p th:if="${antal == 1}">Your  has been added to the cart!</p>
+    <p th:if="${antal > 1}" th:text="'Your ' + ${antal} + ' cupcakes er tilføjet til kurven!'"></p>
     <form action="/cart" method="get">
         <button type="submit">Gå til kurven</button>
     </form>
