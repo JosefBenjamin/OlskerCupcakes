@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Tak for din ordre</title>
+<link rel="icon" href="../public/images/cupcakefavicon.png" type="image/png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<header>
+    <a href="store.html" th:href="@{/}">
+        <img src="../public/images/cupcakeheaderlogo.png" th:src="@{/images/cupcakeheader.png}" width="50%" />
+    </a>
+    <nav>
+        <ul>
+            <li><a href="store.html" th:href="@{/}">Bestil Cupcakes</a></li>
+            <li><a href="login.html" th:href="@{/login}">Log ind</a></li>
+            <li><a href="registeruser.html" th:href="@{/registeruser}">Opret bruger</a></li>
+            <li>
+                <a href="cart.html" th:href="@{/cart}">
+                    <img src="../public/images/shopping_basket.png" th:src="@{/images/shopping_basket.png}" alt="Indkøbskurv" width="20" />
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<h1>Tak for din ordre!</h1>
+
+<p>Dit ordre ID er: <span th:text="${ordre.id}"></span></p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Bund</th>
+        <th>Top</th>
+        <th>Antal</th>
+        <th>Beløb (kr)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ordreLinje : ${ordre.ordreLinjer}">
+        <td th:text="${ordreLinje.bund}"></td>
+        <td th:text="${ordreLinje.top}"></td>
+        <td th:text="${ordreLinje.antal}"></td>
+        <td th:text="${ordreLinje.belob}"></td>
+    </tr>
+    <!-- Total antal og total beløb som sidste række -->
+    <tr>
+        <td colspan="2"><strong>I alt</strong></td>
+        <td th:text="${ordre.totalAntal}"></td>
+        <td th:text="${ordre.totalBelob}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Kom og hent din ordre i vores butik:</h3>
+<p>Olsker Cupcakes</p>
+<p>Bornholmergade 1</p>
+<p>2900 Olsker</p>
+
+</body>
+</html>
