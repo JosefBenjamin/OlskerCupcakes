@@ -29,7 +29,7 @@
 
 <h1>Øens bedste cupcakes! Vælg og bestil her:</h1>
 
-<form class="cupcake-form" method="post" action="/bestil">
+<form class="cupcake-form" method="post" action="/add-to-basket">
 
     <!-- TODO! Dynamic updating based on what is in the database - Price view on selections -->
     
@@ -54,12 +54,12 @@
     <input type="number" name="antal" id="antal" value="1" min="1" step="1" />
 
     <!-- Bestil Knappen -->
-    <button type="submit">Bestil</button>
+    <button type="submit">Add to basket</button>
 </form>
 
 <!-- Bekræftelse og knap vises når cupcake er tilføjet -->
 <div th:if="${cupcakeAdded}">
-    <p>Din cupcake er tilføjet til kurven! 🍰</p>
+    <p>Din cupcake er tilføjet til kurven!</p>
     <form action="/cart" method="get">
         <button type="submit">Gå til kurven</button>
     </form>
