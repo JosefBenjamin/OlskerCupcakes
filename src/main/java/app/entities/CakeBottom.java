@@ -1,6 +1,6 @@
 package app.entities;
 
-public class CakeBottom implements CupcakePart{
+public class CakeBottom implements CupcakePart {
     private int id;
     private String name;
     private int price;

@@ -9,7 +9,7 @@ import io.javalin.http.Context;
 
 public class UserController {
 
-    public static void addRoutes(Javalin app, ConnectionPool connectionPool){
+    public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/login", ctx -> ctx.render("login.html"));
         app.post("/login", ctx -> login(ctx, connectionPool));
         app.get("/logout", ctx -> logout(ctx));
@@ -17,19 +17,19 @@ public class UserController {
         app.post("/createuser", ctx -> createUser(ctx, connectionPool));
     }
 
-    private static void createUser (Context ctx, ConnectionPool connectionPool){
+    private static void createUser(Context ctx, ConnectionPool connectionPool) {
         String email = ctx.formParam("email");
         String password1 = ctx.formParam("password1");
         String password2 = ctx.formParam("password2");
 
-        if(password1.equals(password2)){
+        if (password1.equals(password2)) {
             try {
-                UserMapper.createuser(email, password1, connectionPool);
+                UserMapper.createUser(email, password1, connectionPool);
                 ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + email +
                         " Nu skal du logge på.");
                 ctx.render("login.html");
 
-            } catch (DatabaseException e){
+            } catch (DatabaseException e) {
                 ctx.attribute("message", "Dit brugernavn findes allerede. Prøv igen, eller log ind.");
                 ctx.render("createuser.html");
             }
@@ -39,7 +39,7 @@ public class UserController {
         }
     }
 
-    private static void logout (Context ctx) {
+    private static void logout(Context ctx) {
         ctx.req().getSession().invalidate();
         ctx.redirect("/");
     }

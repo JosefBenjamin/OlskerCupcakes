@@ -4,11 +4,11 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Order {
-    private int         orderId;
-    private int         userId;
-    private int         price;
-    private Timestamp   time;
-    private boolean     isDone;
+    private int orderId;
+    private int userId;
+    private int price;
+    private Timestamp time;
+    private boolean isDone;
 
     public Order(int orderId,
                  int price,
@@ -30,7 +30,7 @@ public class Order {
         this.isDone = isDone;
     }
 
-    public void changeIsDoneStatus(){
+    public void changeIsDoneStatus() {
         this.isDone = !this.isDone;
     }
 

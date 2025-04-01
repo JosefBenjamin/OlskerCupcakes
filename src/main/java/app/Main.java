@@ -2,6 +2,7 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
+import app.controllers.ItemController;
 import app.controllers.UserController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
@@ -20,19 +21,19 @@ public class Main {
 
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         // Initializing Javalin and Jetty webserver
 
         Javalin app = Javalin.create(config -> {
             config.staticFiles.add("/public");
-            config.jetty.modifyServletContextHandler(handler ->  handler.setSessionHandler(SessionConfig.sessionConfig()));
+            config.jetty.modifyServletContextHandler(handler -> handler.setSessionHandler(SessionConfig.sessionConfig()));
             config.fileRenderer(new JavalinThymeleaf(ThymeleafConfig.templateEngine()));
         }).start(7070);
 
         // Routing
-        app.get("/", ctx -> ctx.render("store.html"));
+        app.get("/", ctx -> ItemController.showStore(ctx, connectionPool));
         // Add user-related routes
         UserController.addRoutes(app, connectionPool);
+        ItemController.addRoutes(app, connectionPool);
     }
 }
