@@ -32,12 +32,15 @@ public class User {
     public boolean getAdminStatus() {
         return isAdmin;
     }
+
     public int getUserId() {
         return userId;
     }
+
     public String getEmail() {
         return email;
     }
+
     public int getBalance() {
         return balance;
     }
