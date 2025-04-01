@@ -18,7 +18,6 @@ import java.util.Map;
 public class ItemController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/store", ctx -> showStore(ctx, connectionPool));
         app.post("/add-to-basket", ctx -> addItemsToBasket(ctx, connectionPool));
 
     }
@@ -68,26 +67,15 @@ public class ItemController {
             }
             basket.add(orderLine);
             ctx.sessionAttribute("cupcakeAdded", true);
+            ctx.sessionAttribute("antal", antal);
             ctx.redirect("/store");
+
 
         } catch (Exception e) {
             ctx.status(500).result("Server error: " + e.getMessage());
         }
     }
 
-    public static void showStore(Context ctx, ConnectionPool pool) throws DatabaseException {
-        List<CakeBottom> bundList = ItemMapper.getAllBottoms(pool);
-        List<CakeTop> topList = ItemMapper.getAllToppings(pool);
 
-        boolean cupcakeAdded = Boolean.TRUE.equals(ctx.sessionAttribute("cupcakeAdded"));
-        ctx.sessionAttribute("cupcakeAdded", false); // reset after read
-
-        Map<String, Object> model = new HashMap<>();
-        model.put("bundList", bundList);
-        model.put("topList", topList);
-        model.put("cupcakeAdded", cupcakeAdded);
-
-        ctx.render("store.html", model);
-    }
 
 }

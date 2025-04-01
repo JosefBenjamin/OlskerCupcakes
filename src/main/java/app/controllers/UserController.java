@@ -54,7 +54,7 @@ public class UserController {
         try {
             User user = UserMapper.login(username, password, connectionPool);
             ctx.sessionAttribute("currentUser", user);
-            ctx.render("store.html");
+            ctx.redirect("/store");
         } catch (DatabaseException e) {
             // Hvis nej, send tilbage til login med fejl besked.
             ctx.attribute("message", e.getMessage());
