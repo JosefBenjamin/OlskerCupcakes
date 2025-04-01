@@ -24,12 +24,11 @@ public class AdminMapper {
             if (rowsUpdated == 0) {
                 throw new DatabaseException("No user found");
             }
-        } catch(SQLException e) {
-             throw new DatabaseException("Couldn't update balance");
+        } catch (SQLException e) {
+            throw new DatabaseException("Couldn't update balance");
         }
         return newBalance;
     }
-
 
 
 }

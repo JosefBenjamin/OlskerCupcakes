@@ -22,7 +22,8 @@ public class AdminMapperTest {
 
     private static ConnectionPool connectionPool;
     private static UserMapper userMapper;
-// comment
+
+    // comment
     @BeforeAll
     public static void setUpClass() {
         try {
@@ -108,8 +109,6 @@ public class AdminMapperTest {
 
         assertEquals(100, users.get(0).getBalance());
     }
-
-
 
 
 }

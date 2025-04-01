@@ -35,18 +35,18 @@
     
     <!-- Dropdown for Bund -->
     <label for="bund">Vælg bund:</label>
-    <select name="bund" id="bund">>
-        <option value="chokolade">Chokolade</option>
-        <option value="vanilje">Vanilje</option>
-        <option value="jordbær">Jordbær</option>
+    <select name="bund" id="bund">
+        <option th:each="bund : ${bundList}"
+                th:value="${bund.id}"
+                th:text="${bund.name}">Bund</option>
     </select>
 
     <!-- Dropdown for Top -->
-    <label for="bund">Vælg top:</label>
+    <label for="top">Vælg top:</label>
     <select name="top" id="top">
-        <option value="chokolade">Chokolade</option>
-        <option value="vanilje">Vanilje</option>
-        <option value="karamel">Karamel</option>
+        <option th:each="top : ${topList}"
+                th:value="${top.id}"
+                th:text="${top.name}">Topping</option>
     </select>
 
     <!-- Antal -->

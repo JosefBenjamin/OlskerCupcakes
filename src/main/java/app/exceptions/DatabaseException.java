@@ -1,6 +1,6 @@
 package app.exceptions;
 
-public class DatabaseException extends Exception{
+public class DatabaseException extends Exception {
 
     //Constructor overload (2)
     public DatabaseException(String ourMessage, Throwable cause) {
