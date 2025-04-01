@@ -15,8 +15,13 @@ public class UserController {
         app.get("/logout", ctx -> logout(ctx));
         app.get("/createuser", ctx -> ctx.render("createuser.html"));
         app.post("/createuser", ctx -> createUser(ctx, connectionPool));
-        app.get("/customers", ctx -> ctx.render("customers.html"));
-        app.get("/orders", ctx -> renderOrders(ctx));    }
+        app.get("/customers", ctx -> renderWithUser(ctx, "customers.html"));
+        app.get("/orders", ctx -> renderWithUser(ctx, "orders.html"));
+        app.get("/cart", ctx -> renderWithUser(ctx, "cart.html"));
+        app.get("/customerprofile", ctx -> renderWithUser(ctx, "customerprofile.html"));
+        app.get("/orderconfirmed", ctx -> renderWithUser(ctx, "orderconfirmed.html"));
+        app.get("/store", ctx -> renderWithUser(ctx, "store.html"));
+    }
 
     private static void createUser(Context ctx, ConnectionPool connectionPool) {
         String email = ctx.formParam("email");
@@ -68,13 +73,12 @@ public class UserController {
             ctx.render("login.html");
         }
     }
-    private static void renderOrders(Context ctx) {
+
+    private static void renderWithUser(Context ctx, String template) {
         User user = ctx.sessionAttribute("currentUser");
         if (user != null) {
-            ctx.attribute("user", user); // Set user attribute
-            ctx.render("orders.html");
-        } else {
-            ctx.redirect("/login");
+            ctx.attribute("user", user);
         }
+        ctx.render(template);
     }
 }
