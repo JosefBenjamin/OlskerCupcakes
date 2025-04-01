@@ -15,7 +15,8 @@ public class UserController {
         app.get("/logout", ctx -> logout(ctx));
         app.get("/createuser", ctx -> ctx.render("createuser.html"));
         app.post("/createuser", ctx -> createUser(ctx, connectionPool));
-    }
+        app.get("/customers", ctx -> ctx.render("customers.html"));
+        app.get("/orders", ctx -> renderOrders(ctx));    }
 
     private static void createUser(Context ctx, ConnectionPool connectionPool) {
         String email = ctx.formParam("email");
@@ -44,21 +45,36 @@ public class UserController {
         ctx.redirect("/");
     }
 
-    public static void login(Context ctx, ConnectionPool connectionPool) {
-
+    private static void login(Context ctx, ConnectionPool connectionPool) {
         // Hent for parametre
-        String username = ctx.formParam("email");
+        String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
-        // Check om bruger findes i database med de angivne username + password
+        // Check om bruger findes i database med de angivne email + password
         try {
-            User user = UserMapper.login(username, password, connectionPool);
+            User user = UserMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("currentUser", user);
-            ctx.render("store.html");
+
+            // Check om brugeren er admin
+            if (user.getAdminStatus ()) {
+                ctx.attribute("user", user); // Set user attribute
+                ctx.render("customers.html");
+            } else {
+                ctx.render("store.html");
+            }
         } catch (DatabaseException e) {
             // Hvis nej, send tilbage til login med fejl besked.
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
+        }
+    }
+    private static void renderOrders(Context ctx) {
+        User user = ctx.sessionAttribute("currentUser");
+        if (user != null) {
+            ctx.attribute("user", user); // Set user attribute
+            ctx.render("orders.html");
+        } else {
+            ctx.redirect("/login");
         }
     }
 }
