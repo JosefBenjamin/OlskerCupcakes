@@ -41,7 +41,7 @@
     <tbody>
     <tr th:each="order : ${newOrders}">
         <td th:text="${order.date}"></td>
-        <td th:text="${order.userId}"></td>
+        <td th:text="${order.customerId}"></td>
         <td th:text="${order.orderId}"></td>
         <td th:text="${order.bottom}"></td>
         <td th:text="${order.top}"></td>
@@ -70,7 +70,7 @@
     <tbody>
     <tr th:each="order : ${completedOrders}">
         <td th:text="${order.date}"></td>
-        <td th:text="${order.userId}"></td>
+        <td th:text="${order.customerId}"></td>
         <td th:text="${order.orderId}"></td>
         <td th:text="${order.bottom}"></td>
         <td th:text="${order.top}"></td>
