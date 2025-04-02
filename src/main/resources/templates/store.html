@@ -16,10 +16,10 @@
     <nav>
         <ul>
             <li><a href="store.html" th:href="@{/store}">Bestil Cupcakes</a></li>
-            <li th:if="${user == null}"><a href="login.html" th:href="@{/login}">Log ind</a></li>
-            <li th:if="${user == null}"><a href="createuser.html" th:href="@{/createuser}">Opret bruger</a></li>
-            <li th:if="${user != null}"><span th:text="${user.email}">BrugerEmail</span></li>
-            <li th:if="${user != null}"><a href="#" th:href="@{/logout}">Log ud</a></li>
+            <li th:if="${currentUser == null}"><a href="login.html" th:href="@{/login}">Log ind</a></li>
+            <li th:if="${currentUser == null}"><a href="createuser.html" th:href="@{/createuser}">Opret bruger</a></li>
+            <li th:if="${currentUser != null}"><span th:text="${currentUser.email}">BrugerEmail</span></li>
+            <li th:if="${currentUser != null}"><a href="#" th:href="@{/logout}">Log ud</a></li>
             <li>
                 <a href="cart.html" th:href="@{/cart}">
                     <img src="../public/images/shopping_basket.png" th:src="@{/images/shopping_basket.png}" alt="Indkøbskurv" width="20" />
@@ -31,29 +31,29 @@
 
 <h1>Øens bedste cupcakes! Vælg og bestil her:</h1>
 
-<form class="cupcake-form" method="post" action="/add-to-basket">
+<form class="cupcake-form"   method="post" action="/cart">
 
     <!-- TODO! Dynamic updating based on what is in the database - Price view on selections -->
     
     <!-- Dropdown for Bottom -->
-    <label for="bottom">Vælg bund:</label>
-    <select name="bottom" id="bottom">
-        <option th:each="bottom : ${bottomList}"
-                th:value="${bottom.id}"
-                th:text="${bottom.name}">Bund</option>
+    <label  for="bottom"    >Vælg bund:</label>
+    <select name="bottom"    id="bottom">
+        <option th:each=    "bottom : ${bottomList}"
+                th:value=   "${bottom.id}"
+                th:text=    "${bottom.name}">Bund</option>
     </select>
 
     <!-- Dropdown for Top -->
-    <label for="top">Vælg top:</label>
-    <select name="top" id="top">
-        <option th:each="top : ${topList}"
-                th:value="${top.id}"
-                th:text="${top.name}">Topping</option>
+    <label      for="top"   >Vælg top:</label>
+    <select     name="top"   id="top">
+        <option th:each=    "top : ${topList}"
+                th:value=   "${top.id}"
+                th:text=    "${top.name}">Topping</option>
     </select>
 
     <!-- Quantity -->
     <label for="quantity">Antal cupcakes:</label>
-    <input type="number" name="quantity" id="quantity" value="1" min="1" step="1" />
+    <input type="number" name="quantity" id="quantity" value="1" min="1" step="1" max="99" />
     <!-- Order Button -->
     <button type="submit">Bestil</button>
 </form>
@@ -61,7 +61,7 @@
 <!-- Confirmation and button are displayed when cupcake is added -->
 <div th:if="${cupcakeAdded}">
     <p>Din cupcake er tilføjet til kurven! 🍰</p>
-    <form action="/cart" method="get">
+    <form       action="/cart"       method="get">
         <button type="submit">Gå til kurven</button>
     </form>
 </div>
