@@ -35,12 +35,12 @@
 
     <!-- TODO! Dynamic updating based on what is in the database - Price view on selections -->
     
-    <!-- Dropdown for Bund -->
-    <label for="bund">Vælg bund:</label>
-    <select name="bund" id="bund">
-        <option th:each="bund : ${bundList}"
-                th:value="${bund.id}"
-                th:text="${bund.name}">Bund</option>
+    <!-- Dropdown for Bottom -->
+    <label for="bottom">Vælg bund:</label>
+    <select name="bottom" id="bottom">
+        <option th:each="bottom : ${bottomList}"
+                th:value="${bottom.id}"
+                th:text="${bottom.name}">Bund</option>
     </select>
 
     <!-- Dropdown for Top -->
@@ -51,15 +51,14 @@
                 th:text="${top.name}">Topping</option>
     </select>
 
-    <!-- Antal -->
-    <label for="antal">Antal cupcakes:</label>
-    <input type="number" name="antal" id="antal" value="1" min="1" step="1" />
-
-    <!-- Bestil Knappen -->
+    <!-- Quantity -->
+    <label for="quantity">Antal cupcakes:</label>
+    <input type="number" name="quantity" id="quantity" value="1" min="1" step="1" />
+    <!-- Order Button -->
     <button type="submit">Bestil</button>
 </form>
 
-<!-- Bekræftelse og knap vises når cupcake er tilføjet -->
+<!-- Confirmation and button are displayed when cupcake is added -->
 <div th:if="${cupcakeAdded}">
     <p>Din cupcake er tilføjet til kurven! 🍰</p>
     <form action="/cart" method="get">

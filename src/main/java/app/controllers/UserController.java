@@ -51,16 +51,15 @@ public class UserController {
     }
 
     private static void login(Context ctx, ConnectionPool connectionPool) {
-        // Hent for parametre
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
-        // Check om bruger findes i database med de angivne email + password
+        // Check if user exists in database with the given email + password
         try {
             User user = UserMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("currentUser", user);
 
-            // Check om brugeren er admin
+            // Check if user is admin
             if (user.getAdminStatus ()) {
                 ctx.attribute("user", user); // Set user attribute
                 ctx.render("customers.html");
@@ -68,7 +67,7 @@ public class UserController {
                 ctx.render("store.html");
             }
         } catch (DatabaseException e) {
-            // Hvis nej, send tilbage til login med fejl besked.
+            // If not, send back to login page with error message.
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
         }

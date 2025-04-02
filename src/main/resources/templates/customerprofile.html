@@ -33,15 +33,15 @@
 
 <body>
 
-<h2>Velkommen, <span th:text="${kunde.email}"></span></h2>
+<h2>Velkommen, <span th:text="${user.email}"></span></h2>
 
-<p>Du har <span th:text="${kunde.kontosaldo}"></span> kr til cupcakes.</p>
+<p>Du har <span th:text="${user.userBalance}"></span> kr til cupcakes.</p>
 
 <h3>Dine Oplysninger</h3>
-<form action="#" th:action="@{/opdaterProfil}" method="post">
+<form action="#" th:action="@{/updateProfile}" method="post">
     <div>
         <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" th:value="${kunde.email}" required />
+        <input type="email" id="email" name="email" th:value="${user.email}" required />
     </div>
     <div>
         <label for="password">Kodeord:</label>
@@ -64,12 +64,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="order : ${kunde.tidligereOrdrer}">
-        <td th:text="${order.dato}"></td>
-        <td th:text="${order.bund}"></td>
+    <tr th:each="order : ${user.earlierOrders}">
+        <td th:text="${order.date}"></td>
+        <td th:text="${order.bottom}"></td>
         <td th:text="${order.top}"></td>
-        <td th:text="${order.antal}"></td>
-        <td th:text="${order.pris}"></td>
+        <td th:text="${order.quantity}"></td>
+        <td th:text="${order.amount}"></td>
     </tr>
     </tbody>
 </table>

@@ -10,8 +10,8 @@
 
 <body>
 <header>
-    <a href="store.html" th:href="@{/}">
-        <img src="../public/images/cupcakeheaderlogo.png" th:src="@{/images/cupcakeheader.png}" width="50%" />
+    <a href="/" th:href="@{/}">
+        <img src="/images/cupcakeheaderlogo.png" th:src="@{/images/cupcakeheaderlogo.png}" width="50%" />
     </a>
     <nav>
         <ul>
@@ -44,17 +44,17 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="ordreLinje : ${ordre.ordreLinjer}">
-        <td th:text="${ordreLinje.bund}"></td>
-        <td th:text="${ordreLinje.top}"></td>
-        <td th:text="${ordreLinje.antal}"></td>
-        <td th:text="${ordreLinje.belob}"></td>
+    <tr th:each="orderLine : ${order.orderLines}">
+        <td th:text="${orderLine.bottom}"></td>
+        <td th:text="${orderLine.top}"></td>
+        <td th:text="${orderLine.quantity}"></td>
+        <td th:text="${orderLine.amount}"></td>
     </tr>
-    <!-- Total antal og total beløb som sidste række -->
+    <!-- Total amounts -->
     <tr>
-        <td colspan="2"><strong>I alt</strong></td>
-        <td th:text="${ordre.totalAntal}"></td>
-        <td th:text="${ordre.totalBelob}"></td>
+        <td colspan="2"><strong>Total</strong></td>
+        <td th:text="${order.totalQuantity}"></td>
+        <td th:text="${order.totalAmount}"></td>
     </tr>
     </tbody>
 </table>
