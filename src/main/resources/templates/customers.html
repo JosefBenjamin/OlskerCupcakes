@@ -35,15 +35,15 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="kunde : ${kunder}">
-        <td th:text="${kunde.email}">Kunde E-mail</td>
-        <td th:text="${kunde.id}">Kunde ID</td>
+    <tr th:each="customer : ${customers}">
+        <td th:text="${customer.email}">Kunde E-mail</td>
+        <td th:text="${customer.id}">Kunde ID</td>
         <td>
-            <input type="number" th:field="*{kunder[${kunde.id}].belob}" step="10" min="0" />
+            <input type="number" th:field="*{customers[${customer.id}].belob}" step="10" min="0" />
         </td>
         <td>
             <form th:action="@{/admin/updateKonto}" method="post">
-                <input type="hidden" th:field="*{kunder[${kunde.id}].id}" />
+                <input type="hidden" th:field="*{customers[${customer.id}].id}" />
                 <input type="submit" value="Opdater Konto" />
             </form>
         </td>

@@ -15,6 +15,12 @@ public class UserController {
         app.get("/logout", ctx -> logout(ctx));
         app.get("/createuser", ctx -> ctx.render("createuser.html"));
         app.post("/createuser", ctx -> createUser(ctx, connectionPool));
+        app.get("/customers", ctx -> renderWithUser(ctx, "customers.html"));
+        app.get("/orders", ctx -> renderWithUser(ctx, "orders.html"));
+        app.get("/cart", ctx -> renderWithUser(ctx, "cart.html"));
+        app.get("/customerprofile", ctx -> renderWithUser(ctx, "customerprofile.html"));
+        app.get("/orderconfirmed", ctx -> renderWithUser(ctx, "orderconfirmed.html"));
+        app.get("/store", ctx -> renderWithUser(ctx, "store.html"));
     }
 
     private static void createUser(Context ctx, ConnectionPool connectionPool) {
@@ -44,21 +50,34 @@ public class UserController {
         ctx.redirect("/");
     }
 
-    public static void login(Context ctx, ConnectionPool connectionPool) {
-
-        // Hent for parametre
-        String username = ctx.formParam("email");
+    private static void login(Context ctx, ConnectionPool connectionPool) {
+        String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
-        // Check om bruger findes i database med de angivne username + password
+        // Check if user exists in database with the given email + password
         try {
-            User user = UserMapper.login(username, password, connectionPool);
+            User user = UserMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("currentUser", user);
-            ctx.redirect("/store");
+
+            // Check if user is admin
+            if (user.getAdminStatus ()) {
+                ctx.attribute("user", user); // Set user attribute
+                ctx.redirect("/customers");
+            } else {
+                ctx.redirect("/store");
+            }
         } catch (DatabaseException e) {
-            // Hvis nej, send tilbage til login med fejl besked.
+            // If not, send back to login page with error message.
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
         }
+    }
+
+    private static void renderWithUser(Context ctx, String template) {
+        User user = ctx.sessionAttribute("currentUser");
+        if (user != null) {
+            ctx.attribute("user", user);
+        }
+        ctx.render(template);
     }
 }
