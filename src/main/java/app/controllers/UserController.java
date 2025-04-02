@@ -62,9 +62,9 @@ public class UserController {
             // Check if user is admin
             if (user.getAdminStatus ()) {
                 ctx.attribute("user", user); // Set user attribute
-                ctx.render("customers.html");
+                ctx.redirect("/customers");
             } else {
-                ctx.render("store.html");
+                ctx.redirect("/store");
             }
         } catch (DatabaseException e) {
             // If not, send back to login page with error message.
