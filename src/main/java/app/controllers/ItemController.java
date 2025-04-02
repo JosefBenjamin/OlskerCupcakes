@@ -2,6 +2,7 @@ package app.controllers;
 
 import app.entities.CakeBottom;
 import app.entities.CakeTop;
+import app.entities.CupcakePart;
 import app.entities.OrderLine;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
@@ -17,16 +18,8 @@ import java.util.Map;
 public class ItemController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/store", ctx -> {
-            List<CakeBottom> bundList = ItemMapper.getAllBottoms(connectionPool);
-            List<CakeTop> topList = ItemMapper.getAllToppings(connectionPool);
+        app.post("/add-to-basket", ctx -> addItemsToBasket(ctx, connectionPool));
 
-            Map<String, Object> hashmapper = new HashMap<>();
-            hashmapper.put("bundList", bundList);
-            hashmapper.put("topList", topList);
-
-            ctx.render("store.html", hashmapper);
-        });
     }
 
 
@@ -73,23 +66,16 @@ public class ItemController {
                 basket = new ArrayList<>();
             }
             basket.add(orderLine);
-            ctx.sessionAttribute("basket", basket);
-
+            ctx.sessionAttribute("cupcakeAdded", true);
+            ctx.sessionAttribute("antal", antal);
             ctx.redirect("/store");
+
+
         } catch (Exception e) {
             ctx.status(500).result("Server error: " + e.getMessage());
         }
     }
 
-    public static void showStore(Context ctx, ConnectionPool pool) throws DatabaseException {
-        List<CakeBottom> bundList = ItemMapper.getAllBottoms(pool);
-        List<CakeTop> topList = ItemMapper.getAllToppings(pool);
 
-        Map<String, Object> model = new HashMap<>();
-        model.put("bundList", bundList);
-        model.put("topList", topList);
-
-        ctx.render("store.html", model);
-    }
 
 }
