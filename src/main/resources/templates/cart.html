@@ -15,9 +15,11 @@
     </a>
     <nav>
         <ul>
-            <li><a href="store.html" th:href="@{/}">Bestil Cupcakes</a></li>
-            <li><a href="login.html" th:href="@{/login}">Log ind</a></li>
-            <li><a href="createuser.html" th:href="@{/createuser}">Opret bruger</a></li>
+            <li><a href="store.html" th:href="@{/store}">Bestil Cupcakes</a></li>
+            <li th:if="${user == null}"><a href="login.html" th:href="@{/login}">Log ind</a></li>
+            <li th:if="${user == null}"><a href="createuser.html" th:href="@{/createuser}">Opret bruger</a></li>
+            <li th:if="${user != null}"><span th:text="${user.email}">BrugerEmail</span></li>
+            <li th:if="${user != null}"><a href="#" th:href="@{/logout}">Log ud</a></li>
             <li>
                 <a href="cart.html" th:href="@{/cart}">
                     <img src="../public/images/shopping_basket.png" th:src="@{/images/shopping_basket.png}" alt="Indkøbskurv" width="20" />
@@ -45,7 +47,7 @@
         </thead>
         <tbody>
         <tr th:each="item : ${cart}">
-            <td th:text="${item.base}"></td>
+            <td th:text="${item.bottom}"></td>
             <td th:text="${item.topping}"></td>
             <td th:text="${item.quantity}"></td>
             <td th:text="${item.price}"></td>

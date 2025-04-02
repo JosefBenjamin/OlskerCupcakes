@@ -15,6 +15,13 @@
     </a>
     <nav>
         <ul>
+            <li><a href="store.html" th:href="@{/store}">Bestil Cupcakes</a></li>
+            <li th:if="${user == null}"><a href="login.html" th:href="@{/login}">Log ind</a></li>
+            <li th:if="${user == null}"><a href="createuser.html" th:href="@{/createuser}">Opret bruger</a></li>
+            <li th:if="${user != null}"><span th:text="${user.email}">BrugerEmail</span></li>
+            <li th:if="${user != null}"><a href="#" th:href="@{/logout}">Log ud</a></li>
+            <li>
+                <a href="cart.html" th:href="@{/cart}">
             <li><a href="/store">Bestil Cupcakes</a></li>
 
             <!-- Not logged in -->
@@ -48,12 +55,12 @@
 
     <!-- TODO! Dynamic updating based on what is in the database - Price view on selections -->
     
-    <!-- Dropdown for Bund -->
-    <label for="bund">Vælg bund:</label>
-    <select name="bund" id="bund">
-        <option th:each="bund : ${bundList}"
-                th:value="${bund.id}"
-                th:text="${bund.name}">Bund</option>
+    <!-- Dropdown for Bottom -->
+    <label for="bottom">Vælg bund:</label>
+    <select name="bottom" id="bottom">
+        <option th:each="bottom : ${bottomList}"
+                th:value="${bottom.id}"
+                th:text="${bottom.name}">Bund</option>
     </select>
 
     <!-- Dropdown for Top -->
@@ -64,18 +71,16 @@
                 th:text="${top.name}">Topping</option>
     </select>
 
-    <!-- Antal -->
-    <label for="antal">Antal cupcakes:</label>
-    <input type="number" name="antal" id="antal" value="1" min="1" step="1" />
-
-    <!-- Bestil Knappen -->
-    <button type="submit">Add to basket</button>
+    <!-- Quantity -->
+    <label for="quantity">Antal cupcakes:</label>
+    <input type="number" name="quantity" id="quantity" value="1" min="1" step="1" />
+    <!-- Order Button -->
+    <button type="submit">Bestil</button>
 </form>
 
-<!-- Bekræftelse og knap vises når cupcake er tilføjet -->
+<!-- Confirmation and button are displayed when cupcake is added -->
 <div th:if="${cupcakeAdded}">
-    <p th:if="${antal == 1}">Your  has been added to the cart!</p>
-    <p th:if="${antal > 1}" th:text="'Your ' + ${antal} + ' cupcakes er tilføjet til kurven!'"></p>
+    <p>Din cupcake er tilføjet til kurven! 🍰</p>
     <form action="/cart" method="get">
         <button type="submit">Gå til kurven</button>
     </form>
