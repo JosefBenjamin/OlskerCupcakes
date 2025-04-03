@@ -217,4 +217,13 @@ public class OrderMapper {
             throw new DatabaseException(msg, e.getCause());
         }
     }
+
+    public static int calculateTotalPrice(int bottomId, int topId, int quantity, ConnectionPool connectionPool) throws DatabaseException {
+        CakeBottom bottom = ItemMapper.getBottomById(connectionPool, bottomId);
+        CakeTop top = ItemMapper.getToppingById(connectionPool, bottomId);
+
+        return (bottom.getPrice() + top.getPrice() * quantity);
+    }
+
+
 }
