@@ -222,7 +222,7 @@ public class OrderMapper {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()){
                 if (rs.next()){
-                    return rs.getInt("order_id")
+                    return rs.getInt("order_id");
                 }
             }
         } catch (SQLException e){
