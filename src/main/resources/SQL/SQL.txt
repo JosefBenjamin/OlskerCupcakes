@@ -6,6 +6,7 @@ BEGIN;
 
 DROP TABLE IF EXISTS public.orderline CASCADE;
 
+DROP TABLE IF EXISTS public.order CASCADE;
 DROP TABLE IF EXISTS public.orders CASCADE;
 
 DROP TABLE IF EXISTS public.users CASCADE;
