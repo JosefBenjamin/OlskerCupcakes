@@ -17,6 +17,7 @@ public class UserController {
         app.get("/createuser", ctx -> ctx.render("createuser.html"));
         app.post("/createuser", ctx -> createUser(ctx, connectionPool));
         app.get("/profile", ctx -> showProfile(ctx, connectionPool)); // Only for logged-in non-admin users
+        app.get("/customers", ctx -> showCustomers(ctx, connectionPool));   // Only for logged-in Admin users
     }
 
     private static void createUser(Context ctx, ConnectionPool connectionPool) {
@@ -76,6 +77,20 @@ public class UserController {
         }
         ctx.attribute("currentUser", currentUser); // Set for view
         ctx.render("customerprofile.html"); // Render profile page
+    }
+
+    private static void showCustomers(Context ctx, ConnectionPool connectionPool) {
+        User currentUser = ctx.sessionAttribute("currentUser"); // Get user
+        if (currentUser == null) {
+            ctx.redirect("/login"); // Not logged in
+            return;
+        }
+        if (!currentUser.getAdminStatus()) {
+            ctx.result("Kun Admins har adgang til denne side."); // Block admin
+            return;
+        }
+        ctx.attribute("currentUser", currentUser); // Set for view
+        ctx.render("customers.html"); // Render profile page
     }
 
 }
