@@ -6,16 +6,17 @@ public class OrderLine {
     private int quantity;
     private int price;
     private int orderId;
+    private int userID;
 
     public OrderLine(int topID,
                      int botID,
                      int quantity,
-                     int price,
+                     int userID,
                      int orderId) {
         this.topId = topID;
         this.bottomId = botID;
         this.quantity = quantity;
-        this.price = price;
+        this.userID = userID;
         this.orderId = orderId;
     }
 
@@ -29,14 +30,8 @@ public class OrderLine {
         this.price = price;
     }
 
-    public OrderLine(CakeTop top,
-                     CakeTop bottom,
-                     int quantity){
-        // sessionAttribute
-        this.topId = top.getId();
-        this.bottomId = bottom.getId();
-        this.quantity = quantity;
-        this.price = (top.getPrice()+bottom.getPrice())*quantity;
+    public int getUserID() {
+        return userID;
     }
 
     public int getTopId() {

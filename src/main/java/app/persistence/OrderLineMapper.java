@@ -59,27 +59,28 @@ public class OrderLineMapper {
         return result;
     }
 
-    public static List<OrderLine> getAllOrderlinePerUserID(int userID, ConnectionPool pool) throws DatabaseException{
+    public static List<OrderLine> getAllOrderLinesPerUserID(int userID, ConnectionPool pool) throws DatabaseException{
         List<OrderLine> result = new ArrayList<>();
         /*
         SQL join query that joins the orderline and order tables
         making it possible to search the DB for orderlines for a unique userID
          */
-        String sql = "SELECT orderline.ol_id, "                   +
-                            "orderline.order_id, "                +
-                            "orderline.bot_id, "                  +
-                            "bottom.bot_id, "                     +
-                            "orderline.top_id, "                  +
-                            "topping.top_id, "                    +
-                            "orderline.quantity, "                +
-                            "orderline.price "                    +
-                            "FROM orderline"                      +
-                            "JOIN orders"                         +
-                            "ON orderline.order_id"               +
-                            "JOIN users ON order.order_id"        +
-                            "JOIN bottom ON orderline.bot_id"     +
-                            "JOIN topping ON orderline.top_id"    +
-                            "WHERE users.user_id = ?";
+        String sql = "SELECT test.orderline.ol_id, "                    +
+                            "test.orderline.order_id, "                 +
+                            "test.orderline.bot_id, "                   +
+                            "test.bottom.bot_id, "                      +
+                            "test.orderline.top_id, "                   +
+                            "test.topping.top_id, "                     +
+                            "test.orderline.quantity, "                 +
+                            "test.orderline.ol_price "                  +
+                            "FROM test.orderline "                      +
+                            "JOIN orders "                              +
+                            "ON test.orderline.order_id "               +
+                            "JOIN users ON test.orders.order_id "       +
+                            "JOIN bottom ON test.orderline.bot_id "     +
+                            "JOIN topping ON test.orderline.top_id "    +
+                            "WHERE test.users.user_id = ?";
+
         try (Connection con = pool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)){
             ps.setInt(1, userID);
@@ -92,8 +93,7 @@ public class OrderLineMapper {
                 int topID       = rs.getInt(    "top_id");
                 String topName  = rs.getString( "top_name");
                 int quantity    = rs.getInt(    "quantity");
-                int price       = rs.getInt(    "ol_price");
-                OrderLine orderline = new OrderLine(topID,botID,quantity,price,orderID);
+                OrderLine orderline = new OrderLine(topID,botID,quantity,userID,orderID);
                 result.add(orderline);
             }
 
@@ -105,6 +105,37 @@ public class OrderLineMapper {
         } else {
             throw new DatabaseException("It was not possible to find any orderlines matching the userID (argument)");
         }
+    }
+
+    public static List<OrderLine> getAllOrderLinesByTopID(int topID, ConnectionPool pool) throws DatabaseException{
+        List<OrderLine> result = new ArrayList<>();
+        String sql = "SELECT * FROM test.orderline WHERE top_id = ? ORDER BY order_id ASC";
+        try(Connection con = pool.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setInt(1, topID);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                int orderID = rs.getInt("order_id");
+                int quantity = rs.getInt("quantity");
+                int botID = rs.getInt("bot_id");
+            }
+        } catch (SQLException exc){
+
+        }
+        return result;
+    }
+
+    public static OrderLine getOrderLineByUserID(int userID, List<OrderLine> orderLines){
+        for (OrderLine element : orderLines){
+            if(element.getUserID() == userID){
+                return element;
+            }
+        }
+        return null;
+    }
+
+    public static OrderLine getOrderLineComboByUserID(int userID, int topID, int botID, ConnectionPool pool) throws DatabaseException{
+        return getOrderLineByUserID(userID, getAllOrderLinesByCombo(topID, botID, pool));
     }
 
 

@@ -1,7 +1,7 @@
 package app.persistence;
 
 import app.entities.Order;
-import app.entities.*;
+import app.entities.User;
 import app.exceptions.DatabaseException;
 
 import java.sql.*;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class OrderMapper {
 
 
-    public static Order getAnOrder(String email, ConnectionPool connectionPool) throws DatabaseException {
+    public static Order getAnOrderByEmail(String email, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT * FROM orders " +
                 "JOIN users ON orders.user_id = users.user_id " +
                 "WHERE email =?";
@@ -61,6 +61,43 @@ public class OrderMapper {
             throw new DatabaseException(exc.getMessage());
         }
 
+        return result;
+    }
+
+    public static Order getUncompletedOrderByUserID(int userID, ConnectionPool pool) throws DatabaseException {
+        //Local attribute
+        Order result = null;
+        String sql = "SELECT test.orderline.top_id, " +
+                            "test.orderline.bot_id, " +
+                            "test.orderline.quantity, " +
+                            "test.orderline.order_id, " +
+                            "test.orderline.user_id "+
+                            "FROM test.orders " +
+                            "JOIN orders ON test.orderline.order_id = orders.order_id " +
+                            "JOIN users ON test.orderline.user_id = users.user_id " +
+                            "WHERE user_id = ? AND is_done=false ";
+
+        try (Connection con       = pool.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int price = rs.getInt("total_price");
+                Timestamp date = rs.getTimestamp("order_date");
+                result = new Order(userID, date, price);
+            } else {
+                return getUncompletedOrderByUserID(userID, pool);
+            }
+        } catch (SQLException exc) {
+            throw new DatabaseException(exc.getMessage());
+        }
+
+        return result;
+    }
+
+    public static int getOrderPriceByOrderID(int orderID, ConnectionPool pool){
+        int result = 0;
         return result;
     }
 
@@ -120,8 +157,7 @@ public class OrderMapper {
     }
 
 
-    public List<Order> getAllOrdersByUserID(int userID,
-                                            ConnectionPool pool) throws DatabaseException {
+    public List<Order> getAllOrdersByUserID(int userID, ConnectionPool pool) throws DatabaseException {
         // Local attributes
         List<Order> result = new ArrayList<>();
         String sql = "SELECT * FROM orders WHERE user_id = ?";
@@ -183,38 +219,5 @@ public class OrderMapper {
         }
 
         return result;
-    }
-
-    public static void createOrder(int userID, int price, ArrayList <OrderLine> orderLines, ConnectionPool connectionPool) throws DatabaseException {
-                String sqlOrder     = "INSERT INTO public.\"orders\" (user_id, total_price) values (?,?) RETURNING order_id";
-                String sqlOrderLine = "INSERT INTO public.\"orderline\" (order_id, bot_id, top_id, quantity, ol_price) VALUES (?,?,?,?,?)";
-        try (   Connection connection = connectionPool.getConnection();
-                PreparedStatement psO = connection.prepareStatement(sqlOrder);
-                PreparedStatement psOL = connection.prepareStatement(sqlOrderLine)) {
-
-            psO.setInt(1, userID);
-            psO.setInt(2,price);
-            ResultSet rs = psO.executeQuery();
-            if (rs.next()){
-                int orderID = rs.getInt("order_id");
-                for (OrderLine element : orderLines){
-                    psOL.setInt(1,orderID);
-                    psOL.setInt(2,element.getBottomId());
-                    psOL.setInt(3,element.getTopId());
-                    psOL.setInt(4,element.getQuantity());
-                    psOL.setInt(5,element.getPrice());
-                    psOL.addBatch();
-                }
-                psOL.executeBatch();
-            } else {
-                     throw new DatabaseException("Unable to create an Order");
-            }
-        } catch (SQLException e) {
-            String msg = "An error occurred try again!";
-            if (e.getMessage().startsWith("ERROR: duplicate key value ")) {
-                msg = "The Order is already in use, please use another or login.";
-            }
-            throw new DatabaseException(msg, e.getCause());
-        }
     }
 }

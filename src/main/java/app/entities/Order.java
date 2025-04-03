@@ -31,9 +31,10 @@ public class Order {
         this.isDone = isDone;
     }
 
-    public Order(int userID, Timestamp time) {
+    public Order(int userID, Timestamp time, int price) {
         this.userId = userID;
         this.time = time;
+        this.price = price;
         this.isDone = false;
     }
 
