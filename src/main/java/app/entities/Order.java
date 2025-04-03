@@ -2,7 +2,6 @@ package app.entities;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 
 public class Order {
     private int orderId;
@@ -31,21 +30,8 @@ public class Order {
         this.isDone = isDone;
     }
 
-    public Order(int userID, Timestamp time) {
-        this.userId = userID;
-        this.time = time;
-        this.isDone = false;
-    }
-
-    public void setPrice(ArrayList<OrderLine> orderLine) {
-        int totalPrice = 0;
-        for(OrderLine element : orderLine){
-            totalPrice += element.getPrice();
-        }
-    }
-
-    public void flipDone() {
-        isDone = !isDone;
+    public void changeIsDoneStatus() {
+        this.isDone = !this.isDone;
     }
 
     public int getOrderId() {

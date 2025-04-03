@@ -1,35 +1,27 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Olsker Cupcakes</title>
-    <link rel="icon" href="../public/images/cupcakefavicon.png" type="image/png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+<title>Olsker Cupcakes</title>
+<link rel="icon" href="../public/images/cupcakefavicon.png" type="image/png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
 
 <body>
-<div class="container">
-    <header>
-        <div class="header-images-container">
-            <div class="header-logo">
-                <a href="/" th:href="@{/}">
-                    <img src="/images/logo_olsker_cupcake.png" th:src="@{/images/logo_olsker_cupcake.png}" alt="Olsker Cupcakes Logo" />
-                </a>
-            </div>
-            <div class="header-image">
-                <img src="/images/cupcakeheaderlogo.png" th:src="@{/images/cupcakeheaderlogo.png}" alt="Cupcake Header Logo" />
-            </div>
-        </div>
-        <nav class="admin-menu">
-            <ul>
-                <li><a href="orders.html" th:href="@{/orders}">Ordrer</a></li>
-                <li><a href="customers.html" th:href="@{/customers}">Kunder</a></li>
-                <li><span th:text="${user.email}">BrugerEmail</span></li>
-                <li><a href="#" th:href="@{/logout}">Log ud</a></li>
-            </ul>
-        </nav>
-    </header>
+<header>
+    <a href="/" th:href="@{/}">
+        <img src="/images/cupcakeheaderlogo.png" th:src="@{/images/cupcakeheaderlogo.png}" width="50%" />
+    </a>
+    <nav>
+        <ul>
+            <li><a href="orders.html" th:href="@{/orders}">Ordrer</a></li>
+            <li><a href="customers.html" th:href="@{/customers}">Kunder</a></li>
+            <li><span th:text="${user.email}">BrugerEmail</span></li>
+            <li><a href="#" th:href="@{/logout}">Log ud</a></li>
+        </ul>
+    </nav>
+</header>
 
 <h1>Ordrer:</h1>
 
@@ -49,7 +41,7 @@
     <tbody>
     <tr th:each="order : ${newOrders}">
         <td th:text="${order.date}"></td>
-        <td th:text="${order.userId}"></td>
+        <td th:text="${order.customerId}"></td>
         <td th:text="${order.orderId}"></td>
         <td th:text="${order.bottom}"></td>
         <td th:text="${order.top}"></td>
@@ -78,7 +70,7 @@
     <tbody>
     <tr th:each="order : ${completedOrders}">
         <td th:text="${order.date}"></td>
-        <td th:text="${order.userId}"></td>
+        <td th:text="${order.customerId}"></td>
         <td th:text="${order.orderId}"></td>
         <td th:text="${order.bottom}"></td>
         <td th:text="${order.top}"></td>
@@ -93,11 +85,8 @@
 
 <footer>
     <div class="footer-content">
-        <p>Olsker Cupcakes</p>
-        <p>Bornholmergade 1</p>
-        <p>3770 Olsker</p>
+        <p>&copy; 2025 Olsker Cupcakes. All rights reserved.</p>
     </div>
 </footer>
-</div>
 </body>
 </html>

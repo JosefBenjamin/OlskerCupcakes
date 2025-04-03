@@ -18,22 +18,22 @@ import java.util.Map;
 public class ItemController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        //app.post("/cart", ctx -> addItemsToCart(ctx, connectionPool));
+        app.post("/add-to-basket", ctx -> addItemsToBasket(ctx, connectionPool));
 
     }
 
 
-    public static void addItemsToCart(Context ctx, ConnectionPool connectionPool) {
+    public static void addItemsToBasket(Context ctx, ConnectionPool connectionPool) {
         try {
-            int bottomId = Integer.parseInt(ctx.formParam("bottom.id"));
-            int topId = Integer.parseInt(ctx.formParam("top.id"));
-            int quantity = Integer.parseInt(ctx.formParam("quantity"));
+            int bundId = Integer.parseInt(ctx.formParam("bund"));
+            int topId = Integer.parseInt(ctx.formParam("top"));
+            int antal = Integer.parseInt(ctx.formParam("antal"));
 
             CakeBottom selectedBottom = null;
             CakeTop selectedTop = null;
 
             for (CakeBottom b : ItemMapper.getAllBottoms(connectionPool)) {
-                if (b.getId() == bottomId) {
+                if (b.getId() == bundId) {
                     selectedBottom = b;
                     break;
                 }
@@ -52,22 +52,22 @@ public class ItemController {
             }
 
             // Create the order item
-            topId = selectedTop.getId();
-            bottomId = selectedBottom.getId();
-            //int quantity = antal;
+            int toppingId = selectedTop.getId();
+            int bottomId = selectedBottom.getId();
+            int quantity = antal;
             int price = (selectedTop.getPrice() + selectedBottom.getPrice()) * quantity;
             int orderId = 0;
 
-            OrderLine orderLine = new OrderLine(topId, bottomId, quantity, price, orderId);
+            OrderLine orderLine = new OrderLine(toppingId, bottomId, quantity, price, orderId);
 
-            // Retrieve or create cart from session
-            List<OrderLine> cart = ctx.sessionAttribute("cart");
-            if (cart == null) {
-                cart = new ArrayList<>();
+            // Retrieve or create basket from session
+            List<OrderLine> basket = ctx.sessionAttribute("basket");
+            if (basket == null) {
+                basket = new ArrayList<>();
             }
-            cart.add(orderLine);
+            basket.add(orderLine);
             ctx.sessionAttribute("cupcakeAdded", true);
-            ctx.sessionAttribute("quantity", quantity);
+            ctx.sessionAttribute("antal", antal);
             ctx.redirect("/store");
 
 

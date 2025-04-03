@@ -1,7 +1,7 @@
 package app.persistence;
 
 import app.entities.Order;
-import app.entities.*;
+import app.entities.User;
 import app.exceptions.DatabaseException;
 
 import java.sql.*;
@@ -185,88 +185,27 @@ public class OrderMapper {
         return result;
     }
 
-    public static void createOrder(int userID, int price, ArrayList <OrderLine> orderLines, ConnectionPool connectionPool) throws DatabaseException {
-                String sqlOrder     = "INSERT INTO public.\"orders\" (user_id, total_price) values (?,?) RETURNING order_id";
-                String sqlOrderLine = "INSERT INTO public.\"orderline\" (order_id, bot_id, top_id, quantity, ol_price) VALUES (?,?,?,?,?)";
-        try (   Connection connection = connectionPool.getConnection();
-                PreparedStatement psO = connection.prepareStatement(sqlOrder);
-                PreparedStatement psOL = connection.prepareStatement(sqlOrderLine)) {
+    public static void createuser(String userEmail, String userPassword, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "insert into users (username, password) values (?,?)";
 
-            psO.setInt(1, userID);
-            psO.setInt(2,price);
-            ResultSet rs = psO.executeQuery();
-            if (rs.next()){
-                int orderID = rs.getInt("order_id");
-                for (OrderLine element : orderLines){
-                    psOL.setInt(1,orderID);
-                    psOL.setInt(2,element.getBottomId());
-                    psOL.setInt(3,element.getTopId());
-                    psOL.setInt(4,element.getQuantity());
-                    psOL.setInt(5,element.getPrice());
-                    psOL.addBatch();
-                }
-                psOL.executeBatch();
-            } else {
-                     throw new DatabaseException("Unable to create an Order");
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setString(1, userEmail);
+            ps.setString(2, userPassword);
+
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new DatabaseException("Failed to create a user, please try again!");
             }
         } catch (SQLException e) {
-            String msg = "An error occurred try again!";
+            String msg = "An error occurred try agian!";
             if (e.getMessage().startsWith("ERROR: duplicate key value ")) {
-                msg = "The Order is already in use, please use another or login.";
+                msg = "The email is already in use, please use another or login.";
             }
             throw new DatabaseException(msg, e.getCause());
         }
     }
-
-    public static int calculateTotalPrice(int bottomId, int topId, int quantity, ConnectionPool connectionPool) throws DatabaseException {
-        CakeBottom bottom = ItemMapper.getBottomById(connectionPool, bottomId);
-        CakeTop top = ItemMapper.getToppingById(connectionPool, bottomId);
-
-        return (bottom.getPrice() + top.getPrice() * quantity);
-    }
-
-    private static int createNewOrder(Connection connection, int userId) throws SQLException{
-
-        String sql = "INSTERT INTO orders (user_id, order_date, total_price, is_done) VALUES (?, NOW(), 0, false RETURNING order_id;";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, userId);
-
-            try (ResultSet rs = ps.executeQuery()){
-                if (rs.next()) {
-                    return rs.getInt("order_id");
-                }
-            }
-        } throw new SQLException("There was an error creating the order, please try again");
-    }
-
-    private static int getOrCreateOrder(Connection connection, int userId) throws DatabaseException, SQLException {
-
-        int existingOrderId = findActiveOrderId(connection, userId);
-
-        if (existingOrderId == -1) {
-            return existingOrderId;
-        }
-        return createNewOrder(connection, userId);
-    }
-
-    public static int findActiveOrderId(Connection connection, int userId) throws DatabaseException {
-
-        String sql = "SELECT * FROM orders WHERE user_id = ?";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)){
-
-            ps.setInt(1, userId);
-            try (ResultSet rs = ps.executeQuery()){
-                if (rs.next()){
-                    return rs.getInt("order_id");
-                }
-            }
-        } catch (SQLException e){
-            throw new DatabaseException("There was an error connecting to your order", e.getMessage());
-        }
-        return -1;
-    }
-
-
 }

@@ -10,8 +10,7 @@ import java.sql.SQLException;
 
 public class AdminMapper {
 
-    public static int adjustBalance(String userEmail, int newBalance, ConnectionPool connectionPool) throws DatabaseException
-    {
+    public static int adjustBalance(String userEmail, int newBalance, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "UPDATE users SET balance=? WHERE email=?";
 
         try (
