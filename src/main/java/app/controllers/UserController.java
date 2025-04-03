@@ -2,10 +2,11 @@ package app.controllers;
 
 import app.entities.Order;
 import app.entities.OrderLine;
-import app.entities.User;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
-import app.persistence.UserMapper;
+import app.persistence.OrderMapper;
+import app.persistence.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 public class UserController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+
         app.get(    "/login",           ctx -> ctx.render                   ("login.html"));
         app.post(   "/login",           ctx -> login                        (ctx,           connectionPool));
         app.get(    "/logout",          ctx -> logout                       (ctx));
@@ -23,7 +25,7 @@ public class UserController {
         app.get(    "/customers",       ctx -> renderWithUser               (ctx, "customers.html", connectionPool));
         app.get(    "/orders",          ctx -> renderWithUser               (ctx, "orders.html", connectionPool));
         app.get(    "/cart",            ctx -> ctx.render                   ("cart.html"));
-        app.post(   "/cart",            ctx -> ItemController.addItemsToCart(ctx, connectionPool);
+        //app.post(   "/cart",            ctx -> ItemController.addItemsToCart(ctx, connectionPool);
         app.get(    "/customerprofile", ctx -> renderWithUser               (ctx, "customerprofile.html", connectionPool));
         app.get(    "/orderconfirmed",  ctx -> renderWithUser               (ctx, "orderconfirmed.html", connectionPool));
         app.post(   "/store",           ctx -> redirectWithUser             (ctx, "store.html", connectionPool));
