@@ -21,7 +21,7 @@ public class StoreController {
 
 
     public static void showStore(Context ctx, ConnectionPool pool) throws DatabaseException {
-        List<CakeBottom> bundList = ItemMapper.getAllBottoms(pool);
+        List<CakeBottom> bottomList = ItemMapper.getAllBottoms(pool);
         List<CakeTop> topList = ItemMapper.getAllToppings(pool);
 
         boolean cupcakeAdded = Boolean.TRUE.equals(ctx.sessionAttribute("cupcakeAdded"));
@@ -29,13 +29,13 @@ public class StoreController {
         Integer antal = ctx.sessionAttribute("antal");
 
         Map<String, Object> model = new HashMap<>();
-        model.put("bundList", bundList);
+        model.put("bottomList", bottomList);
         model.put("topList", topList);
         model.put("cupcakeAdded", cupcakeAdded);
         model.put("currentUser", ctx.sessionAttribute("currentUser"));
         model.put("antal", antal);
-
         ctx.render("store.html", model);
+
     }
 }
 
