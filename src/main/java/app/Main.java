@@ -41,7 +41,7 @@ public class Main {
         ArrayList<OrderLine> test = new ArrayList<>();
         try{
             test.add(new OrderLine(1,1,1,10));
-            OrderMapper.createOrder(1, 69,test ,connectionPool);
+            OrderMapper.createOrder(1 ,connectionPool);
 
         } catch ( DatabaseException exc){
             System.out.println("error while testing orderLine creation");

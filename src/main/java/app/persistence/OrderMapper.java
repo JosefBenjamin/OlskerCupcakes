@@ -1,7 +1,7 @@
 package app.persistence;
 
 import app.entities.Order;
-import app.entities.User;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 
 import java.sql.*;
@@ -11,6 +11,9 @@ import java.util.ArrayList;
 
 public class OrderMapper {
 
+    public static void createOrder(int UserID, ConnectionPool pool)throws DatabaseException{
+
+    }
 
     public static Order getAnOrderByEmail(String email, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT * FROM orders " +
