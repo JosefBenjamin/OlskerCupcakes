@@ -1,5 +1,7 @@
 package app.persistence;
 
+import app.entities.CakeBottom;
+import app.entities.CakeTop;
 import app.entities.Order;
 import app.entities.User;
 import app.exceptions.DatabaseException;
@@ -183,6 +185,13 @@ public class OrderMapper {
         }
 
         return result;
+    }
+
+    public static int calculateTotalPrice(int bottomId, int topId, int quantity, ConnectionPool connectionPool) throws DatabaseException {
+        CakeBottom bottom = ItemMapper.getBottomById(connectionPool, bottomId);
+        CakeTop top = ItemMapper.getToppingById(connectionPool, bottomId);
+
+        return (bottom.getPrice() + top.getPrice() * quantity);
     }
 
     public static void createuser(String userEmail, String userPassword, ConnectionPool connectionPool) throws DatabaseException {
