@@ -1,7 +1,143 @@
-/* Stylesheet for the application */
+/* Text */
 
 h1 {
-    color: #369;
+    color: black;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 3rem;
+    font-size: 2rem;
+    padding-bottom: 40px;
+}
+
+/* Body */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+    flex: 1;
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+/* Header */
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.header-images-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0; /* Fjern padding */
+    margin: 0; /* Fjern margin */
+}
+
+.header-logo {
+    margin-top: 30px; /* Adjust margins as needed */
+}
+
+.header-image {
+    margin: 0;
+    margin-bottom: 30px;
+}
+
+.header-image img {
+    max-height: 200px; /* Adjust the height as needed */
+}
+
+header nav {
+    width: 100%;
+}
+
+header nav ul {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    padding-bottom: 30px;
+}
+
+header nav ul li {
+    margin: 0 10px;
+}
+
+header nav ul li:first-child {
+    margin-right: auto;
+}
+
+header nav ul li a {
+    color: #FC19C7;
+    text-decoration: none;
+}
+
+header nav ul li a:hover {
+    color: #c2189b;
+}
+
+nav ul {
+    display: flex;
+    justify-content: flex-end;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li:first-child {
+    margin-right: auto;
+}
+
+/*Admin menu*/
+.admin-menu ul {
+    display: flex;
+    justify-content: flex-start; /* Align items to the left */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.admin-menu ul li {
+    margin: 0 10px;
+}
+
+.admin-menu ul li:nth-child(1),
+.admin-menu ul li:nth-child(2) {
+    margin-right: 20px; /* Ensure space between the first two items */
+}
+
+.admin-menu ul li:nth-child(3) {
+    margin-left: auto; /* Push the third item to the right */
+}
+
+/* Footer */
+footer {
+    color: #FC19C7;
+    margin-top: auto;
+    padding: 10px 0;
+    text-align: left;
+    width: 100%;
+    padding-top: 50px;
 }
