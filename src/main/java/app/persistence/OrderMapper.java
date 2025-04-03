@@ -6,6 +6,7 @@ import app.entities.Order;
 import app.entities.User;
 import app.exceptions.DatabaseException;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.sql.SQLException;
 import java.util.List;
@@ -187,7 +188,7 @@ public class OrderMapper {
         return result;
     }
 
-    private static int getOrCreateOrder(Connection connection, int userId) throws SQLException {
+    private static int getOrCreateOrder(Connection connection, int userId) throws DatabaseException, SQLException {
 
         int existingOrderId = findActiveOrderId(connection, userId);
 
@@ -212,7 +213,23 @@ public class OrderMapper {
         } throw new SQLException("There was an error creating the order, please try again");
     }
 
+    public static int findActiveOrderId(Connection connection, int userId) throws DatabaseException {
 
+        String sql = "SELECT * FROM orders WHERE user_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)){
+
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()){
+                if (rs.next()){
+                    return rs.getInt("order_id")
+                }
+            }
+        } catch (SQLException e){
+            throw new DatabaseException("There was an error connecting to your order", e.getMessage());
+        }
+        return -1;
+    }
 
     public static int calculateTotalPrice(int bottomId, int topId, int quantity, ConnectionPool connectionPool) throws DatabaseException {
         CakeBottom bottom = ItemMapper.getBottomById(connectionPool, bottomId);
