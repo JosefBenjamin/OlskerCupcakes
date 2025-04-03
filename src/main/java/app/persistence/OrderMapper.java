@@ -250,7 +250,23 @@ public class OrderMapper {
         return createNewOrder(connection, userId);
     }
 
+    public static int findActiveOrderId(Connection connection, int userId) throws DatabaseException {
 
+        String sql = "SELECT * FROM orders WHERE user_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)){
+
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()){
+                if (rs.next()){
+                    return rs.getInt("order_id");
+                }
+            }
+        } catch (SQLException e){
+            throw new DatabaseException("There was an error connecting to your order", e.getMessage());
+        }
+        return -1;
+    }
 
 
 }
