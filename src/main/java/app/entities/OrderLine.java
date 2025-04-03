@@ -19,6 +19,25 @@ public class OrderLine {
         this.orderId = orderId;
     }
 
+    public OrderLine(int topID,
+                     int botID,
+                     int quantity,
+                     int price) {
+        this.topId = topID;
+        this.bottomId = botID;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    public OrderLine(CakeTop top,
+                     CakeTop bottom,
+                     int quantity){
+        // sessionAttribute
+        this.topId = top.getId();
+        this.bottomId = bottom.getId();
+        this.quantity = quantity;
+        this.price = (top.getPrice()+bottom.getPrice())*quantity;
+    }
 
     public int getTopId() {
         return this.topId;

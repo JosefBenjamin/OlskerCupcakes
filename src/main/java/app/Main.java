@@ -3,13 +3,19 @@ package app;
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
 import app.controllers.ItemController;
-import app.controllers.StoreController;
+import app.controllers.*;
 import app.controllers.UserController;
+import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
+import app.persistence.*;
+import app.entities.*;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
+
+import static javassist.runtime.DotClass.fail;
 
 public class Main {
 
@@ -32,6 +38,16 @@ public class Main {
         }).start(7070);
 
         // Routing
+        ArrayList<OrderLine> test = new ArrayList<>();
+        try{
+            test.add(new OrderLine(1,1,1,10));
+            OrderMapper.createOrder(1, 69,test ,connectionPool);
+
+        } catch ( DatabaseException exc){
+            System.out.println("error while testing orderLine creation");
+        }
+
+
         app.get("/", ctx -> StoreController.showStore(ctx, connectionPool));
         app.get("/store", ctx -> StoreController.showStore(ctx, connectionPool));
 

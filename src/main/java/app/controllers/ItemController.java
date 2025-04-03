@@ -18,15 +18,15 @@ import java.util.Map;
 public class ItemController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.post("/add-to-cart", ctx -> addItemsToCart(ctx, connectionPool));
+        //app.post("/cart", ctx -> addItemsToCart(ctx, connectionPool));
 
     }
 
 
     public static void addItemsToCart(Context ctx, ConnectionPool connectionPool) {
         try {
-            int bottomId = Integer.parseInt(ctx.formParam("bottom"));
-            int topId = Integer.parseInt(ctx.formParam("top"));
+            int bottomId = Integer.parseInt(ctx.formParam("bottom.id"));
+            int topId = Integer.parseInt(ctx.formParam("top.id"));
             int quantity = Integer.parseInt(ctx.formParam("quantity"));
 
             CakeBottom selectedBottom = null;
