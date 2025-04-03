@@ -93,5 +93,23 @@ public class UserMapper {
         return memberList;
     }
 
+    public static void updateUserBalance(int userId, int newBalance, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE users SET balance = ? WHERE user_id = ?";
+
+        try(Connection connection = connectionPool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)){
+
+            ps.setInt(1, newBalance);
+            ps.setInt(2, userId);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new DatabaseException("Failed to update user balance for " + userId +", please try again!");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Error while updating user balance, please try again.", e.getMessage());
+        }
+    }
+
 
 }
