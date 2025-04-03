@@ -1,31 +1,41 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Olsker Cupcakes</title>
-<link rel="icon" href="../public/images/cupcakefavicon.png" type="image/png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <title>Olsker Cupcakes</title>
+    <link rel="icon" href="/images/cupcakefavicon.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
 
 <body>
-<header>
-    <a href="/" th:href="@{/}">
-        <img src="/images/cupcakeheaderlogo.png" th:src="@{/images/cupcakeheaderlogo.png}" width="50%" />
-    </a>
-    <nav>
-        <ul>
-            <li><a href="store.html" th:href="@{/}">Bestil Cupcakes</a></li>
-            <li><a href="login.html" th:href="@{/login}">Log ind</a></li>
-            <li><a href="createuser.html" th:href="@{/createuser}">Opret bruger</a></li>
-            <li>
-                <a href="cart.html" th:href="@{/cart}">
-                    <img src="../public/images/shopping_basket.png" th:src="@{/images/shopping_basket.png}" alt="Indkøbskurv" width="20" />
+<div class="container">
+    <header>
+        <div class="header-images-container">
+            <div class="header-logo">
+                <a href="/" th:href="@{/}">
+                    <img src="/images/logo_olsker_cupcake.png" th:src="@{/images/logo_olsker_cupcake.png}" alt="Olsker Cupcakes Logo" />
                 </a>
-            </li>
-        </ul>
-    </nav>
-</header>
+            </div>
+            <div class="header-image">
+                <img src="/images/cupcakeheaderlogo.png" th:src="@{/images/cupcakeheaderlogo.png}" alt="Cupcake Header Logo" />
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="store.html" th:href="@{/store}">Bestil Cupcakes</a></li>
+                <li th:if="${user == null}"><a href="login.html" th:href="@{/login}">Log ind</a></li>
+                <li th:if="${user == null}"><a href="createuser.html" th:href="@{/createuser}">Opret bruger</a></li>
+                <li th:if="${user != null}"><span th:text="${user.email}">BrugerEmail</span></li>
+                <li th:if="${user != null}"><a href="#" th:href="@{/logout}">Log ud</a></li>
+                <li>
+                    <a href="cart.html" th:href="@{/cart}">
+                        <img src="/images/shopping_basket.png" th:src="@{/images/shopping_basket.png}" alt="Indkøbskurv" width="20"/>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
 
 <h1>Opret en bruger for at bestille cupcakes</h1>
 
@@ -34,7 +44,7 @@
     <input type="password" name="password1" placeholder="Password" required minlength="2"/>
     <input type="password" name="password2" placeholder="Gentag password" required minlength="2"/>
 
-    <button type="submit" formaction="/createuser">Opret Bruger</button>
+    <button type="submit" formaction="/createuser">Opret bruger</button>
 
     <div><p th:text="${message}"> </p></div>
 </form>
@@ -43,8 +53,11 @@
 
 <footer>
     <div class="footer-content">
-        <p>&copy; 2025 Olsker Cupcakes. All rights reserved.</p>
+        <p>Olsker Cupcakes</p>
+        <p>Bornholmergade 1</p>
+        <p>3770 Olsker</p>
     </div>
 </footer>
+</div>
 </body>
 </html>
