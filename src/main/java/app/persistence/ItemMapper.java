@@ -93,6 +93,9 @@ public class ItemMapper {
         return topping;
     } // getToppingById()
 
+
+
+    /*
     public static CupcakePart getCupcakePartByID(boolean TRUEisTopping_FALSEisBottom,
                                                  int ID, ConnectionPool pool) throws DatabaseException {
         // Local attributes
@@ -157,4 +160,6 @@ public class ItemMapper {
 
         return result;
     } // getAllCupcakeParts()
+     */
+
 }
