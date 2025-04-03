@@ -1,6 +1,6 @@
 package app.entities;
 
-public class CakeBottom implements CupcakePart {
+public class CakeBottom extends CupcakePart {
     private int id;
     private String name;
     private int price;
@@ -11,18 +11,8 @@ public class CakeBottom implements CupcakePart {
         this.price = price;
     }
 
-
-    // Getters
-    public int getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public int getPrice() {
-        return this.price;
+    CakeBottom(int id){
+        this.id = id;
     }
 
     @Override

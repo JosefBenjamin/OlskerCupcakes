@@ -1,10 +1,19 @@
 package app.entities;
 
-public interface CupcakePart {
+public abstract class CupcakePart {
+    private int id;
+    private String name;
+    private int price;
 
-    public String getName();
+    public String getName() {
+        return this.name;
+    }
 
-    public int getPrice();
+    public int getPrice() {
+        return this.price;
+    }
 
-    public int getId();
+    public int getId() {
+        return this.id;
+    }
 }
