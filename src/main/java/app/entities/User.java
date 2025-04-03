@@ -1,5 +1,8 @@
 package app.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
 
     private int userId;
@@ -7,6 +10,7 @@ public class User {
     private String password;
     private boolean isAdmin;
     private int balance = 0;
+    private List<Order> tidligereOrdrer = new ArrayList<>();
 
     public User(int userId, String email, String password, boolean isAdmin, int balance) {
         this.isAdmin = isAdmin;
@@ -43,6 +47,14 @@ public class User {
 
     public int getBalance() {
         return balance;
+    }
+
+    public List<Order> getTidligereOrdrer() {
+        return tidligereOrdrer;
+    }
+
+    public void setTidligereOrdrer(List<Order> tidligereOrdrer) {
+        this.tidligereOrdrer = tidligereOrdrer;
     }
 
     @Override

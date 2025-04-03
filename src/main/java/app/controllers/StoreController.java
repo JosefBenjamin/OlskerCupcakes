@@ -15,7 +15,7 @@ import java.util.Map;
 public class StoreController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-
+        //handler
         app.get("/store", ctx -> showStore(ctx, connectionPool));
     }
 

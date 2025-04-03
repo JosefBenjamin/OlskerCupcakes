@@ -9,12 +9,14 @@ import io.javalin.http.Context;
 
 public class UserController {
 
+    //handlers
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/login", ctx -> ctx.render("login.html"));
         app.post("/login", ctx -> login(ctx, connectionPool));
         app.get("/logout", ctx -> logout(ctx));
         app.get("/createuser", ctx -> ctx.render("createuser.html"));
         app.post("/createuser", ctx -> createUser(ctx, connectionPool));
+        app.get("/profile", ctx -> showProfile(ctx, connectionPool)); // Only for logged-in non-admin users
     }
 
     private static void createUser(Context ctx, ConnectionPool connectionPool) {
@@ -61,4 +63,19 @@ public class UserController {
             ctx.render("login.html");
         }
     }
+
+    private static void showProfile(Context ctx, ConnectionPool connectionPool) {
+        User currentUser = ctx.sessionAttribute("currentUser"); // Get user
+        if (currentUser == null) {
+            ctx.redirect("/login"); // Not logged in
+            return;
+        }
+        if (currentUser.getAdminStatus()) {
+            ctx.result("Admins har ikke adgang til denne side."); // Block admin
+            return;
+        }
+        ctx.attribute("currentUser", currentUser); // Set for view
+        ctx.render("customerprofile.html"); // Render profile page
+    }
+
 }

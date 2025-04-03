@@ -185,27 +185,5 @@ public class OrderMapper {
         return result;
     }
 
-    public static void createuser(String userEmail, String userPassword, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "insert into users (username, password) values (?,?)";
 
-        try (
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
-            ps.setString(1, userEmail);
-            ps.setString(2, userPassword);
-
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected != 1) {
-                throw new DatabaseException("Failed to create a user, please try again!");
-            }
-        } catch (SQLException e) {
-            String msg = "An error occurred try agian!";
-            if (e.getMessage().startsWith("ERROR: duplicate key value ")) {
-                msg = "The email is already in use, please use another or login.";
-            }
-            throw new DatabaseException(msg, e.getCause());
-        }
-    }
 }
