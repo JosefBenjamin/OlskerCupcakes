@@ -17,6 +17,7 @@ import java.util.Map;
 
 public class ItemController {
 
+    //handlers
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.post("/add-to-basket", ctx -> addItemsToBasket(ctx, connectionPool));
 

@@ -29,17 +29,15 @@
 
 <h1>Din Profil</h1>
 
-<body>
+<h2>Velkommen, <span th:text="${currentUser.email}"></span></h2>
 
-<h2>Velkommen, <span th:text="${kunde.email}"></span></h2>
-
-<p>Du har <span th:text="${kunde.kontosaldo}"></span> kr til cupcakes.</p>
+<p>Du har <span th:text="${currentUser.balance}"></span> kr til cupcakes.</p>
 
 <h3>Dine Oplysninger</h3>
 <form action="#" th:action="@{/opdaterProfil}" method="post">
     <div>
         <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" th:value="${kunde.email}" required />
+        <input type="email" id="email" name="email" th:value="${currentUser.email}" required />
     </div>
     <div>
         <label for="password">Kodeord:</label>
@@ -62,7 +60,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="order : ${kunde.tidligereOrdrer}">
+    <tr th:each="order : ${currentUser.tidligereOrdrer}">
         <td th:text="${order.dato}"></td>
         <td th:text="${order.bund}"></td>
         <td th:text="${order.top}"></td>
@@ -73,8 +71,6 @@
 </table>
 
 <a href="#" th:href="@{/logout}">Log ud</a>
-
-</body>
 
 <footer>
     <div class="footer-content">
