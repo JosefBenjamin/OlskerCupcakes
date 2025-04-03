@@ -240,5 +240,17 @@ public class OrderMapper {
         } throw new SQLException("There was an error creating the order, please try again");
     }
 
+    private static int getOrCreateOrder(Connection connection, int userId) throws DatabaseException, SQLException {
+
+        int existingOrderId = findActiveOrderId(connection, userId);
+
+        if (existingOrderId == -1) {
+            return existingOrderId;
+        }
+        return createNewOrder(connection, userId);
+    }
+
+
+
 
 }
