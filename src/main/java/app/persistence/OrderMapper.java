@@ -187,6 +187,21 @@ public class OrderMapper {
         return result;
     }
 
+    private static int createNewOrder(Connection connection, int userId) throws SQLException{
+
+        String sql = "INSTERT INTO orders (user_id, order_date, total_price, is_done) VALUES (?, NOW(), 0, false RETURNING order_id;";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()){
+                if (rs.next()) {
+                    return rs.getInt("order_id");
+                }
+            }
+        } throw new SQLException("There was an error creating the order, please try again");
+    }
+
     public static int calculateTotalPrice(int bottomId, int topId, int quantity, ConnectionPool connectionPool) throws DatabaseException {
         CakeBottom bottom = ItemMapper.getBottomById(connectionPool, bottomId);
         CakeTop top = ItemMapper.getToppingById(connectionPool, bottomId);
