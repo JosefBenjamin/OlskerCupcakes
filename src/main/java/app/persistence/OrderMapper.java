@@ -217,4 +217,56 @@ public class OrderMapper {
             throw new DatabaseException(msg, e.getCause());
         }
     }
+
+    public static int calculateTotalPrice(int bottomId, int topId, int quantity, ConnectionPool connectionPool) throws DatabaseException {
+        CakeBottom bottom = ItemMapper.getBottomById(connectionPool, bottomId);
+        CakeTop top = ItemMapper.getToppingById(connectionPool, bottomId);
+
+        return (bottom.getPrice() + top.getPrice() * quantity);
+    }
+
+    private static int createNewOrder(Connection connection, int userId) throws SQLException{
+
+        String sql = "INSTERT INTO orders (user_id, order_date, total_price, is_done) VALUES (?, NOW(), 0, false RETURNING order_id;";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()){
+                if (rs.next()) {
+                    return rs.getInt("order_id");
+                }
+            }
+        } throw new SQLException("There was an error creating the order, please try again");
+    }
+
+    private static int getOrCreateOrder(Connection connection, int userId) throws DatabaseException, SQLException {
+
+        int existingOrderId = findActiveOrderId(connection, userId);
+
+        if (existingOrderId == -1) {
+            return existingOrderId;
+        }
+        return createNewOrder(connection, userId);
+    }
+
+    public static int findActiveOrderId(Connection connection, int userId) throws DatabaseException {
+
+        String sql = "SELECT * FROM orders WHERE user_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)){
+
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()){
+                if (rs.next()){
+                    return rs.getInt("order_id");
+                }
+            }
+        } catch (SQLException e){
+            throw new DatabaseException("There was an error connecting to your order", e.getMessage());
+        }
+        return -1;
+    }
+
+
 }
