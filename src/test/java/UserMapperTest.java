@@ -116,9 +116,12 @@ public class UserMapperTest {
     @Test
     void testLogin() {
         try {
-            String plainPassword = "1234";
-            String hashedPassword = BCrypt.hashpw(plainPassword, BCrypt.gensalt());
-            User user = userMapper.login("example@example.org", hashedPassword, connectionPool);
+            // Retrieve the stored hashed password from the database
+            String storedHashedPassword = userMapper.getPasswordByEmail("example@example.org", connectionPool);
+
+            // Use the plain password for login
+            User user = userMapper.login("example@example.org", "1234", connectionPool);
+
             assertNotNull(user);
             assertEquals("example@example.org", user.getEmail());
         } catch (DatabaseException e) {

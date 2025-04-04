@@ -158,4 +158,23 @@ public class UserMapper {
             throw new DatabaseException("Database error while retrieving user by email.", e);
         }
     }
+
+    public String getPasswordByEmail(String email, ConnectionPool connectionPool) throws DatabaseException {
+        try (Connection connection = connectionPool.getConnection()) {
+            String sql = "SELECT password FROM test.users WHERE email = ?";
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setString(1, email);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getString("password");
+                    } else {
+                        throw new DatabaseException("User not found");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+    }
+
 }
