@@ -2,7 +2,6 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
-import app.controllers.ItemController;
 import app.controllers.StoreController;
 import app.controllers.UserController;
 import app.persistence.ConnectionPool;
@@ -33,10 +32,9 @@ public class Main {
 
         // Routing
         app.get("/", ctx -> StoreController.showStore(ctx, connectionPool));
-        app.get("/store", ctx -> StoreController.showStore(ctx, connectionPool));
 
         // Add user-related routes
         UserController.addRoutes(app, connectionPool);
-        ItemController.addRoutes(app, connectionPool);
+        StoreController.addRoutes(app, connectionPool);
     }
 }

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Olsker Cupcakes</title>
-<link rel="icon" href="../public/images/cupcakefavicon.png" type="image/png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <title>Olsker Cupcakes</title>
+    <link rel="icon" href="../public/images/cupcakefavicon.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -15,26 +15,38 @@
     </a>
     <nav>
         <ul>
-            <li><a href="store.html" th:href="@{/}">Bestil Cupcakes</a></li>
-            <li><a href="login.html" th:href="@{/login}">Log ind</a></li>
-            <li><a href="createuser.html" th:href="@{/createuser}">Opret bruger</a></li>
-            <li>
-                <a href="cart.html" th:href="@{/cart}">
-                    <img src="../public/images/shopping_basket.png" th:src="@{/images/shopping_basket.png}" alt="Indkøbskurv" width="20" />
+            <li><a href="/store" th:href="@{/store}">Bestil Cupcakes</a></li>
+
+            <li th:if="${currentUser == null}">
+                <a href="/login">Log ind</a>
+            </li>
+            <li th:if="${currentUser == null}">
+                <a href="/createuser">Opret bruger</a>
+            </li>
+
+            <li th:if="${currentUser != null}">
+                <span th:text="'Velkommen, ' + ${currentUser.email}"></span>
+                <a href="/logout">Log ud</a>
+            </li>
+            <li th:if="${currentUser != null and !currentUser.adminStatus}">
+                <a href="/profile">Vis profil</a>
+            </li>
+            <li th:if="${currentUser != null}">
+                <a href="/cart" th:href="@{/cart}">
+                    <img src="../public/images/shopping_basket.png" th:src="@{/images/shopping_basket.png}"
+                         alt="Indkøbskurv" width="20" />
                 </a>
             </li>
         </ul>
     </nav>
 </header>
 
-<h1>Din kurv</h1>
+<!-- If we have orderLines, show table + total -->
+<div th:if="${orderLines != null && !orderLines.isEmpty()}">
+    <h2>Ordre ID: <span th:text="${order.orderId}"></span></h2>
+    <h3>Bestilt: <span th:text="${#dates.format(order.timestamp, 'dd-MM-yyyy HH:mm')}"></span></h3>
 
-<div th:if="${cart == null || cart.isEmpty()}">
-    <p>Din kurv er tom.</p>
-</div>
-
-<div th:if="${cart != null && !cart.isEmpty()}">
-    <table>
+    <table class="order-table">
         <thead>
         <tr>
             <th>Bund</th>
@@ -44,33 +56,39 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="item : ${cart}">
-            <td th:text="${item.base}"></td>
-            <td th:text="${item.topping}"></td>
-            <td th:text="${item.quantity}"></td>
-            <td th:text="${item.price}"></td>
+        <tr th:each="line : ${orderLines}">
+            <td th:text="${line.bottomName}"></td>
+            <td th:text="${line.topName}"></td>
+            <td th:text="${line.quantity}"></td>
+            <td th:text="${line.price + ' kr'}"></td>
         </tr>
         </tbody>
     </table>
-    <p>Samlet pris: <span th:text="${totalPrice}"></span> DKK</p>
+
+    <p>Total: <span th:text="${order.price}">0</span> kr</p>
+
+    <!-- If user is not logged in, show login form -->
+    <div th:if="${currentUser == null}">
+        <h2>Log ind for at gennemføre betalingen</h2>
+        <form class="login-form" method="post">
+            <input type="email" name="email" placeholder="E-mail"/>
+            <input type="password" name="password" placeholder="Password"/>
+            <button type="submit" formaction="/login">Log ind</button>
+            <div><p th:text="${message}"> </p></div>
+        </form>
+        <p><a href="/createuser" th:href="@{/createuser}">Eller opret bruger ➡</a></p>
+    </div>
+
+    <!-- If user is logged in, show checkout button -->
+    <div class="payment" th:if="${currentUser != null}">
+        <a href="/checkout" class="checkout-button">PAY TO BAKE</a>
+    </div>
 </div>
 
-<h1>Log ind for at gennemføre betalingen</h1>
-
-<form class="login-form" method="post">
-    <input type="email" name="email" placeholder="E-mail"/>
-    <input type="password" name="password" placeholder="Password"/>
-
-    <button type="submit" formaction="/login">Log ind</button>
-
-    <div><p th:text="${message}"> </p></div>
-</form>
-
-<p><a href="createuser.html" th:href="@{/createuser}">Eller opret bruger ➡ </a></p>
-
-
-<button onclick="window.location.href='/checkout'">Gå til betaling</button>
-
+<!-- If cart is empty, just show a message -->
+<div th:if="${orderLines == null || #lists.isEmpty(orderLines)}">
+    <p>Din kurv er tom.</p>
+</div>
 
 <footer>
     <div class="footer-content">

@@ -14,12 +14,25 @@
         <img src="/images/cupcakeheaderlogo.png" th:src="@{/images/cupcakeheaderlogo.png}" width="50%" />
     </a>
     <nav>
-        <ul>
-            <li><a href="store.html" th:href="@{/}">Bestil Cupcakes</a></li>
-            <li><a href="login.html" th:href="@{/login}">Log ind</a></li>
-            <li><a href="createuser.html" th:href="@{/createuser}">Opret bruger</a></li>
+        <!-- If user is logged in -->
+        <ul th:if="${currentUser != null}">
+            <li><a th:href="@{/store}">Bestil Cupcakes</a></li>
+            <li><a th:href="@{/profile}">Profil</a></li>
+            <li><a th:href="@{/logout}">Log ud</a></li>
             <li>
-                <a href="cart.html" th:href="@{/cart}">
+                <a th:href="@{/cart}">
+                    <img src="../public/images/shopping_basket.png" th:src="@{/images/shopping_basket.png}" alt="Indkøbskurv" width="20" />
+                </a>
+            </li>
+        </ul>
+
+        <!-- If user is NOT logged in -->
+        <ul th:if="${currentUser == null}">
+            <li><a th:href="@{/}">Bestil Cupcakes</a></li>
+            <li><a th:href="@{/login}">Log ind</a></li>
+            <li><a th:href="@{/createuser}">Opret bruger</a></li>
+            <li>
+                <a th:href="@{/cart}">
                     <img src="../public/images/shopping_basket.png" th:src="@{/images/shopping_basket.png}" alt="Indkøbskurv" width="20" />
                 </a>
             </li>
@@ -31,46 +44,29 @@
 
 <h2>Velkommen, <span th:text="${currentUser.email}"></span></h2>
 
-<p>Du har <span th:text="${currentUser.balance}"></span> kr til cupcakes.</p>
+<p class="money-2-cupcakes">Du har <span th:text="${currentUser.balance}"></span> kr til cupcakes.</p>
 
-<h3>Dine Oplysninger</h3>
-<form action="#" th:action="@{/opdaterProfil}" method="post">
-    <div>
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" th:value="${currentUser.email}" required />
-    </div>
-    <div>
-        <label for="password">Kodeord:</label>
-        <input type="password" id="password" name="password" required />
-    </div>
-    <div>
-        <input type="submit" value="Opdater" />
-    </div>
+<h3>Opdater dine oplysninger</h3>
+<form class="update-info" method="post" action="/profile/update">
+    <label for="newEmail">Ny e-mail:</label>
+    <input type="email" name="newEmail" id="newEmail" />
+
+    <label for="newPassword">Nyt kodeord:</label>
+    <input type="password" name="newPassword" id="newPassword" />
+
+    <button type="submit">Opdater profil</button>
 </form>
 
 <h3>Tidligere Ordrer</h3>
-<table>
-    <thead>
-    <tr>
-        <th>Dato</th>
-        <th>Bund</th>
-        <th>Top</th>
-        <th>Antal</th>
-        <th>Pris (kr)</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="order : ${currentUser.tidligereOrdrer}">
-        <td th:text="${order.dato}"></td>
-        <td th:text="${order.bund}"></td>
-        <td th:text="${order.top}"></td>
-        <td th:text="${order.antal}"></td>
-        <td th:text="${order.pris}"></td>
-    </tr>
-    </tbody>
-</table>
-
-<a href="#" th:href="@{/logout}">Log ud</a>
+<!-- user’s old orders -->
+<div class="your-orders" th:each="ord : ${currentUser.tidligereOrdrer}">
+    <h3 th:text="'Order ' + ${ord.orderId} + ' - ' + ${#dates.format(ord.timestamp, 'dd-MM-yyyy HH:mm')}"></h3>
+    <ul>
+        <li th:each="line : ${ord.orderLines}"
+            th:text="'Top: ' + ${line.topName} + ', Bund: ' + ${line.bottomName} + ', Antal: ' + ${line.quantity}"></li>
+    </ul>
+    <p th:text="'Total pris: ' + ${ord.price} + ' kr'"></p>
+</div>
 
 <footer>
     <div class="footer-content">
