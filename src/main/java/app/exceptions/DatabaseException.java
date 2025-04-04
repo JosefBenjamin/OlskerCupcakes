@@ -2,7 +2,7 @@ package app.exceptions;
 
 public class DatabaseException extends Exception {
 
-    //Constructor overload (2)
+    //Constructor overload (3)
     public DatabaseException(String ourMessage, Throwable cause) {
         super(ourMessage, cause);
         System.out.println("userMessage: " + ourMessage);

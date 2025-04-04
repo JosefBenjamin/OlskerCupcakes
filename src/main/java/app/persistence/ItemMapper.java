@@ -93,68 +93,41 @@ public class ItemMapper {
         return topping;
     } // getToppingById()
 
-    public static CupcakePart getCupcakePartByID(boolean TRUEisTopping_FALSEisBottom,
-                                                 int ID, ConnectionPool pool) throws DatabaseException {
-        // Local attributes
-        CupcakePart result = null;
-        String sqlPart1 = TRUEisTopping_FALSEisBottom ? "topping" : "bottom";
-        String sqlPart2 = TRUEisTopping_FALSEisBottom ? "top" : "bot";
-        String sql = "SELECT * FROM " + sqlPart1 + " WHERE " + sqlPart2 + "_id = ?";
+    public static String getBottomNameById(int bottomId, ConnectionPool pool) throws DatabaseException {
+        String name = null;
+        String sql = "SELECT bot_name FROM bottom WHERE bot_id = ?";
 
         try (Connection con = pool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            // The ID is referring (top/bot)_id in the DB
-            ps.setInt(1, ID);
+            ps.setInt(1, bottomId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                int id = rs.getInt(sqlPart2 + "_id");                                             // Retrieves (top/bot)_id from DB & give as Constructor parameter
-                String name = rs.getString(sqlPart2 + "_name");                                        // Retrieves (top/bot)_name from DB & give as Constructor parameter
-                int price = rs.getInt(sqlPart2 + "_price");                                          // Retrieves (top/bot)_price from DB & give as Constructor parameter
+                name = rs.getString("bot_name");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Error while getting bottom name by ID", e);
+        }
 
-                if (TRUEisTopping_FALSEisBottom) {
-                    //Returns a CakeTop
-                    result = new CakeTop(id, name, price);
-                } else {
-                    //Returns a CakeBottom
-                    result = new CakeBottom(id, name, price);
-                } // if-else (inner)
-            } // if (outer)
-        } catch (SQLException exc) {
-            throw new DatabaseException("Error while getting " + sqlPart1 + " part", exc);
-        } // catch
-        return result;
-    } // getCupcakePartByID()
+        return name;
+    }
 
-    public static List<CupcakePart> getAllCupcakeParts(boolean TRUEisTopping_FALSEisBottom, ConnectionPool pool) throws DatabaseException {
-        // Local attributes
-        List<CupcakePart> result = new ArrayList<>();
-        String sqlPart1 = TRUEisTopping_FALSEisBottom ? "topping" : "bottom";
-        String sqlPart2 = TRUEisTopping_FALSEisBottom ? "top" : "bot";
-        String sql = "SELECT * FROM " + sqlPart1 + " WHERE " + sqlPart2 + "_id = ?";
+    public static String getToppingNameById(int toppingId, ConnectionPool pool) throws DatabaseException {
+        String name = null;
+        String sql = "SELECT top_name FROM topping WHERE top_id = ?";
 
         try (Connection con = pool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
+            ps.setInt(1, toppingId);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                if (TRUEisTopping_FALSEisBottom) {
-                    // Add a CakeTop to the result List
-                    result.add(
-                            new CakeTop(rs.getInt(sqlPart2 + "_id"),                                   // Retrieves top_id from DB & give as Constructor parameter
-                                    rs.getString(sqlPart2 + "_name"),                              // Retrieves top_name from DB & give as Constructor parameter
-                                    rs.getInt(sqlPart2 + "_price")));                              // Retrieves top_price from DB & give as Constructor parameter
-                } else {
-                    // Add a CakeBottom to the result List
-                    result.add(new CakeBottom(rs.getInt(sqlPart2 + "_id"),                                   // Retrieves bot_id from DB & give as Constructor parameter
-                            rs.getString(sqlPart2 + "_name"),                              // Retrieves bot_name from DB & give as Constructor parameter
-                            rs.getInt(sqlPart2 + "_price")));                              // Retrieves bot_price from DB & give as Constructor parameter
-                } // if-else
-            } // while
-        } catch (SQLException exc) {
-            throw new DatabaseException("Error while getting " + sqlPart1 + " part", exc);
-        } // catch
+            if (rs.next()) {
+                name = rs.getString("top_name");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Error while getting topping name by ID", e);
+        }
 
-        return result;
-    } // getAllCupcakeParts()
+        return name;
+    }
 }

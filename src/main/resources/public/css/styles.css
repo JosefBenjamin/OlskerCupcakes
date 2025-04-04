@@ -1,7 +1,314 @@
-/* Stylesheet for the application */
+/* Reset some default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Overall body styling */
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #fdf9f5; /* Light, warm background for that cupcake vibe */
+    color: #333;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Header */
+header {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-bottom: 2px solid #ececec;
+    padding: 0.5rem 1rem;
+}
+
+header img {
+    max-width: 180px;
+}
+
+/* Top nav */
+nav {
+    margin-left: auto;
+}
+
+nav ul, nav > div {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: #d35b88; /* Cupcake pinkish color */
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+}
+
+nav a:hover {
+    background-color: #ffe6f0; /* Light pink hover highlight */
+}
+
+/* Headings */
+h1, h2, h3, h4 {
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    color: #d35b88;
+    margin: 1rem 0;
+    text-align: center;
+}
 
 h1 {
-    color: #369;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 3rem;
+    font-size: 2.2rem;
+}
+
+/* Main form styling (like .cupcake-form) */
+.cupcake-form, .login-form {
+    max-width: 350px;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.cupcake-form label,
+.login-form label {
+    font-weight: bold;
+    color: #444;
+}
+
+.cupcake-form select,
+.login-form input[type="email"],
+.login-form input[type="password"],
+.cupcake-form input[type="number"],
+.login-form input[type="text"] {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.cupcake-form button,
+.login-form button {
+    cursor: pointer;
+    background: #d35b88;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.7rem;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.cupcake-form button:hover,
+.login-form button:hover {
+    background: #c24a77;
+}
+
+/* Info / alert paragraphs */
+p {
+    margin: 0.75rem auto;
+    max-width: 600px;
+    line-height: 1.6;
+    color: #444;
+}
+
+/* Table styling */
+.order-table {
+    width: 90%;
+    margin: 1rem auto;
+    border-collapse: collapse;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+}
+
+.order-table thead {
+    background: #f8f6f6;
+}
+
+.order-table th,
+.order-table td {
+    border: 1px solid #e0e0e0;
+    padding: 0.75rem;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.order-table th {
+    font-weight: 600;
+    color: #d35b88;
+}
+
+/* Footer */
+footer {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #fff;
+    border-top: 2px solid #ececec;
+    text-align: center;
+}
+
+.footer-content p {
+    color: #666;
+}
+
+/* Basket styling */
+.basket-something {
+    margin: 1rem auto;
+    max-width: 400px;
+    background: #ffe6f0;
+    border: 2px solid #f5cfe0;
+    padding: 1rem;
+    border-radius: 6px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.basket-something p {
+    margin: 0.75rem 0;
+    font-weight: 600;
+    color: #d35b88; /* The same pinkish brand color */
+}
+
+.basket-something form button {
+    margin-top: 0.5rem;
+    background: #d35b88;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.7rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.basket-something form button:hover {
+    background: #c24a77;
+}
+
+/* Profile update form styling */
+.update-info {
+    max-width: 400px;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.update-info label {
+    font-weight: bold;
+    color: #444;
+}
+
+.update-info input[type="email"],
+.update-info input[type="password"] {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.update-info button {
+    cursor: pointer;
+    background: #d35b88;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.7rem;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.update-info button:hover {
+    background: #c24a77;
+}
+
+/* Orders section styling */
+.your-orders {
+    width: 90%;
+    max-width: 600px;
+    margin: 1rem auto;
+    background: #fff;
+    border: 1px solid #ececec;
+    border-radius: 6px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.your-orders h3 {
+    margin: 0.5rem 0 0.75rem 0;
+    text-align: left;
+    font-size: 1.1rem;
+    color: #d35b88;
+}
+
+.your-orders ul {
+    margin-left: 1rem;
+    list-style: disc;
+}
+
+.your-orders ul li {
+    margin-bottom: 0.4rem;
+    color: #444;
+}
+
+.your-orders p {
+    margin: 0.75rem 0;
+    font-weight: 600;
+    color: #444;
+}
+
+/* “You have XX kr” text */
+.money-2-cupcakes {
+    text-align: center;
+    font-weight: 600;
+    color: #555;
+    margin-top: 1rem;
+}
+
+/* Payment button container */
+.payment {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.payment .checkout-button {
+    display: inline-block;
+    padding: 0.7rem 1.2rem;
+    background-color: #d35b88;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.payment .checkout-button:hover {
+    background-color: #c24a77;
+}
+
+/* Responsive layout */
+@media (max-width: 680px) {
+    header {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    nav ul, nav > div {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 0.5rem;
+    }
+
+    .cupcake-form, .login-form, .update-info {
+        width: 90%;
+    }
+
+    .order-table {
+        width: 95%;
+    }
+
+    .your-orders {
+        width: 95%;
+    }
 }

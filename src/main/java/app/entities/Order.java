@@ -1,7 +1,7 @@
 package app.entities;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Order {
     private int orderId;
@@ -9,6 +9,8 @@ public class Order {
     private int price;
     private Timestamp time;
     private boolean isDone;
+    private List<OrderLine> orderLines;
+
 
     public Order(int orderId,
                  int price,
@@ -52,6 +54,14 @@ public class Order {
 
     public boolean isDoneStatus() {
         return isDone;
+    }
+
+    public List<OrderLine> getOrderLines() {
+        return orderLines;
+    }
+
+    public void setOrderLines(List<OrderLine> orderLines) {
+        this.orderLines = orderLines;
     }
 
     @Override

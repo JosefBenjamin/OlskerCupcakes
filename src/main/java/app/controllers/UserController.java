@@ -1,11 +1,15 @@
 package app.controllers;
 
+import app.entities.Order;
+import app.entities.OrderLine;
 import app.entities.User;
 import app.exceptions.DatabaseException;
-import app.persistence.ConnectionPool;
-import app.persistence.UserMapper;
+import app.persistence.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserController {
 
@@ -17,6 +21,7 @@ public class UserController {
         app.get("/createuser", ctx -> ctx.render("createuser.html"));
         app.post("/createuser", ctx -> createUser(ctx, connectionPool));
         app.get("/profile", ctx -> showProfile(ctx, connectionPool)); // Only for logged-in non-admin users
+        app.post("/profile/update", ctx -> updateUserProfile(ctx, connectionPool));
     }
 
     private static void createUser(Context ctx, ConnectionPool connectionPool) {
@@ -65,17 +70,72 @@ public class UserController {
     }
 
     private static void showProfile(Context ctx, ConnectionPool connectionPool) {
-        User currentUser = ctx.sessionAttribute("currentUser"); // Get user
+        User currentUser = ctx.sessionAttribute("currentUser");
         if (currentUser == null) {
-            ctx.redirect("/login"); // Not logged in
+            ctx.redirect("/login");
             return;
         }
         if (currentUser.getAdminStatus()) {
-            ctx.result("Admins har ikke adgang til denne side."); // Block admin
+            ctx.result("Admins har ikke adgang til denne side.");
             return;
         }
-        ctx.attribute("currentUser", currentUser); // Set for view
-        ctx.render("customerprofile.html"); // Render profile page
+
+        try {
+            // Load previous orders
+            List<Order> previousOrders = new OrderMapper().getAllOrdersByUserID(currentUser.getUserId(), connectionPool);
+
+            // For each order, attach the order lines and set names
+            for (Order order : previousOrders) {
+                // Get lines for this order
+                List<OrderLine> lines = OrderLineMapper.getAllOrderLinesByOrderID(connectionPool, order.getOrderId());
+
+                // Fill in topName/bottomName for each line
+                for (OrderLine line : lines) {
+                    // These methods come from your ItemMapper or similar
+                    line.setTopName(ItemMapper.getToppingNameById(line.getTopId(), connectionPool));
+                    line.setBottomName(ItemMapper.getBottomNameById(line.getBottomId(), connectionPool));
+                }
+
+                // Attach lines to the order
+                order.setOrderLines(lines);
+            }
+
+            // Store the orders on the user object
+            currentUser.setTidligereOrdrer(previousOrders);
+
+            ctx.attribute("currentUser", currentUser);
+            ctx.render("customerprofile.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("error", "Kunne ikke hente tidligere ordrer: " + e.getMessage());
+            ctx.render("customerprofile.html");
+        }
     }
+
+    private static void updateUserProfile(Context ctx, ConnectionPool connectionPool) {
+        User currentUser = ctx.sessionAttribute("currentUser");
+        if (currentUser == null) {
+            ctx.redirect("/login");
+            return;
+        }
+
+        String newEmail = ctx.formParam("newEmail");
+        String newPassword = ctx.formParam("newPassword");
+
+        try {
+            if (newEmail != null && !newEmail.isBlank()) {
+                UserMapper.updateEmail(currentUser.getUserId(), newEmail, connectionPool);
+                currentUser = UserMapper.getUserByEmail(newEmail, connectionPool);
+            }
+            if (newPassword != null && !newPassword.isBlank()) {
+                UserMapper.updatePassword(currentUser.getUserId(), newPassword, connectionPool);
+            }
+            ctx.sessionAttribute("currentUser", currentUser); // Refresh session
+            ctx.redirect("/profile");
+        } catch (DatabaseException e) {
+            ctx.attribute("error", "Kunne ikke opdatere bruger: " + e.getMessage());
+            ctx.render("customerprofile.html");
+        }
+    }
+
 
 }

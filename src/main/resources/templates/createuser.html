@@ -16,7 +16,7 @@
     <nav>
         <ul>
             <li><a href="store.html" th:href="@{/}">Bestil Cupcakes</a></li>
-            <li><a href="login.html" th:href="@{/login}">Log ind</a></li>
+            <li><a th:href="@{/login}">Log ind</a></li>
             <li><a href="createuser.html" th:href="@{/createuser}">Opret bruger</a></li>
             <li>
                 <a href="cart.html" th:href="@{/cart}">
@@ -30,9 +30,9 @@
 <h1>Opret en bruger for at bestille cupcakes</h1>
 
 <form class="login-form" method="post">
-    <input type="email" name="email" placeholder="E-mail"/>
-    <input type="password" name="password1" placeholder="Password" required minlength="2"/>
-    <input type="password" name="password2" placeholder="Gentag password" required minlength="2"/>
+    <input type="email" name="email" placeholder="E-mail" required/>
+    <input type="password" name="password1" placeholder="Password" required minlength="2" maxlength="50" />
+    <input type="password" name="password2" placeholder="Gentag password" required minlength="2" maxlength="50" />
 
     <button type="submit" formaction="/createuser">Opret Bruger</button>
 

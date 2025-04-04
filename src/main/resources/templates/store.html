@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Olsker Cupcakes</title>
-<link rel="icon" href="/images/cupcakefavicon.png" type="image/png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <title>Olsker Cupcakes</title>
+    <link rel="icon" href="/images/cupcakefavicon.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -14,41 +14,27 @@
         <img src="/images/cupcakeheaderlogo.png" th:src="@{/images/cupcakeheaderlogo.png}" width="50%" />
     </a>
     <nav>
-        <ul>
-            <li><a href="/store">Bestil Cupcakes</a></li>
+        <!-- If user is logged in -->
+        <div th:if="${session.currentUser != null}">
+            <a href="/store" th:href="@{/store}">Bestil Cupcakes</a>
+            <a href="/profile" th:href="@{/profile}">Profil</a>
+            <a href="/logout" th:href="@{/logout}">Log ud</a>
+            <a href="/cart" th:href="@{/cart}">🛒 Kurv</a>
+        </div>
 
-            <!-- Not logged in -->
-            <li th:if="${currentUser == null}">
-                <a href="/login">Log ind</a>
-            </li>
-            <li th:if="${currentUser == null}">
-                <a href="/createuser">Opret bruger</a>
-            </li>
-
-            <!-- Logged in -->
-            <li th:if="${currentUser != null}">
-                <span th:text="'Velkommen, ' + ${currentUser.email}"></span>
-                <a href="/logout">Log ud</a>
-            </li>
-            <li th:if="${currentUser != null}">
-                <a href="/profile">Vis profil</a> <!-- Add this route in controller -->
-            </li>
-            <li th:if="${currentUser != null}">
-                <a href="/cart" th:href="@{/cart}">
-                    <img src="../public/images/shopping_basket.png" th:src="@{/images/shopping_basket.png}" alt="Indkøbskurv" width="20" />
-                </a>
-            </li>
-        </ul>
+        <!-- If user is NOT logged in -->
+        <div th:if="${session.currentUser == null}">
+            <a href="/store" th:href="@{/store}">Bestil Cupcakes</a>
+            <a href="/login" th:href="@{/login}">Log ind</a>
+            <a href="/createuser" th:href="@{/createuser}">Opret bruger</a>
+        </div>
     </nav>
 </header>
 
 <h1>Øens bedste cupcakes! Vælg og bestil her:</h1>
 
-<form class="cupcake-form" method="post" action="/add-to-basket">
-
-    <!-- TODO! Dynamic updating based on what is in the database - Price view on selections -->
-    
-    <!-- Dropdown for Bund -->
+<!-- Show the order form only if user is logged in -->
+<form class="cupcake-form" method="post" action="/add-to-basket" th:if="${session.currentUser != null}">
     <label for="bund">Vælg bund:</label>
     <select name="bund" id="bund">
         <option th:each="bund : ${bundList}"
@@ -56,7 +42,6 @@
                 th:text="${bund.name}">Bund</option>
     </select>
 
-    <!-- Dropdown for Top -->
     <label for="top">Vælg top:</label>
     <select name="top" id="top">
         <option th:each="top : ${topList}"
@@ -64,20 +49,19 @@
                 th:text="${top.name}">Topping</option>
     </select>
 
-    <!-- Antal -->
     <label for="antal">Antal cupcakes:</label>
     <input type="number" name="antal" id="antal" value="1" min="1" step="1" />
 
-    <!-- Bestil Knappen -->
     <button type="submit">Add to basket</button>
 </form>
+<p th:if="${session.currentUser == null}">Please LOGIN or REGISTER to enter our secret cupcake club<3</p>
 
 <!-- Bekræftelse og knap vises når cupcake er tilføjet -->
-<div th:if="${cupcakeAdded}">
-    <p th:if="${antal == 1}">Your  has been added to the cart!</p>
-    <p th:if="${antal > 1}" th:text="'Your ' + ${antal} + ' cupcakes er tilføjet til kurven!'"></p>
+<div class="basket-something" th:if="${cupcakeAdded}">
+    <p th:if="${antal == 1}" th:text="'Din cupcake er tilføjet til kurven!'"></p>
+    <p th:if="${antal > 1}" th:text="'Dine ' + ${antal} + ' cupcakes er tilføjet til kurven!'"></p>
     <form action="/cart" method="get">
-        <button type="submit">Gå til kurven</button>
+        <button type="submit">Go to your cupcakes</button>
     </form>
 </div>
 
