@@ -5,6 +5,7 @@ import app.persistence.UserMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -71,11 +72,15 @@ public class UserMapperTest {
                 // Reset the sequence number
                 stmt.execute("SELECT setval('test.user_id', COALESCE((SELECT MAX(user_id) FROM test.users), 1), false)");
                 // Insert rows
+                String hashed1 = BCrypt.hashpw("1234", BCrypt.gensalt());
+                String hashed2 = BCrypt.hashpw("2345", BCrypt.gensalt());
+                String hashed3 = BCrypt.hashpw("1234", BCrypt.gensalt());
+                String hashed4 = BCrypt.hashpw("1234", BCrypt.gensalt());
                 stmt.execute("INSERT INTO test.users (email, password, is_admin, balance) " +
-                        "VALUES ('example@example.org', '1234', false, 0), " +
-                        "('something@example.org', '2345', false, 0), " +
-                        "('random@example.org', '1234', false, 0), " +
-                        "('johan@example.org', '1234', false, 0)");
+                        "VALUES ('example@example.org', '" + hashed1 + "', false, 0), " +
+                        "('something@example.org', '" + hashed2 + "', false, 0), " +
+                        "('random@example.org', '" + hashed3 + "', false, 0), " +
+                        "('johan@example.org', '" + hashed4 + "', false, 0)");
 
                 // Set sequence to continue from the largest member_id
                 stmt.execute("SELECT setval('test.user_id', COALESCE((SELECT MAX(user_id)+1 FROM test.users), 1), false)");
@@ -111,7 +116,9 @@ public class UserMapperTest {
     @Test
     void testLogin() {
         try {
-            User user = userMapper.login("example@example.org", "1234", connectionPool);
+            String plainPassword = "1234";
+            String hashedPassword = BCrypt.hashpw(plainPassword, BCrypt.gensalt());
+            User user = userMapper.login("example@example.org", hashedPassword, connectionPool);
             assertNotNull(user);
             assertEquals("example@example.org", user.getEmail());
         } catch (DatabaseException e) {
