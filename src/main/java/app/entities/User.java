@@ -12,6 +12,7 @@ public class User {
     private int balance = 0;
     private List<Order> tidligereOrdrer = new ArrayList<>();
 
+    //Constructor for register
     public User(int userId, String email, String password, boolean isAdmin, int balance) {
         this.isAdmin = isAdmin;
         this.password = password;
@@ -20,6 +21,7 @@ public class User {
         this.balance = balance;
     }
 
+    //Constructor for login
     public User(int userId, String email, String password, boolean isAdmin) {
         this.userId = userId;
         this.email = email;

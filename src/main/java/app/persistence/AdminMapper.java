@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 public class AdminMapper {
 
+    //Sets the balance of user/customer account by using email as the identifier
     public static int adjustBalance(String userEmail, int newBalance, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "UPDATE users SET balance=? WHERE email=?";
 

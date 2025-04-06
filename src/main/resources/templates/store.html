@@ -19,7 +19,10 @@
             <a href="/store" th:href="@{/store}">Bestil Cupcakes</a>
             <a href="/profile" th:href="@{/profile}">Profil</a>
             <a href="/logout" th:href="@{/logout}">Log ud</a>
-            <a href="/cart" th:href="@{/cart}">🛒 Kurv</a>
+            <a href="/cart" th:href="@{/cart}">
+                <img src="../public/images/shopping_basket.png" th:src="@{/images/shopping_basket.png}"
+                     alt="Indkøbskurv" width="20" />
+            </a>
         </div>
 
         <!-- If user is NOT logged in -->

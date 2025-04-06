@@ -201,7 +201,7 @@ public class OrderMapper {
                 int orderId = rs.getInt("order_id");
                 Timestamp date = rs.getTimestamp("order_date");
 
-                // 👇 This now matches your Order constructor: Order(int orderId, int userId, int price, Timestamp time, boolean isDone)
+                // This now matches your Order constructor: Order(int orderId, int userId, int price, Timestamp time, boolean isDone)
                 return new Order(orderId, userId, 0, date, false);
             } else {
                 throw new DatabaseException("Failed to create new order");
