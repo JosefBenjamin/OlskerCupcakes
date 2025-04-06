@@ -30,10 +30,10 @@ public class Main {
             config.fileRenderer(new JavalinThymeleaf(ThymeleafConfig.templateEngine()));
         }).start(7070);
 
-        // Routing
+        // root handler / refers to localhost/7070 equivalent of the google.dk/ or cphbusiness.dk/
         app.get("/", ctx -> StoreController.showStore(ctx, connectionPool));
 
-        // Add user-related routes
+        // controller handlers
         UserController.addRoutes(app, connectionPool);
         StoreController.addRoutes(app, connectionPool);
     }

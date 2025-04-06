@@ -16,6 +16,17 @@ class CakeBottom extends CakePart{
                                  -String name
                                  -int price
                                  }
+
+class User {
+}
+
+class Order {
+}
+
+class OrderLine {
+}
+
+
 }
 
 package "config"{

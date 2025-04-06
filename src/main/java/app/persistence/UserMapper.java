@@ -126,7 +126,8 @@ public class UserMapper {
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            ps.setString(1, newPassword);
+            String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+            ps.setString(1, hashedPassword);
             ps.setInt(2, userId);
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated != 1) {
@@ -159,6 +160,7 @@ public class UserMapper {
         }
     }
 
+    //Exists solely because of the integration tests that should be adapted after passwords were hashed
     public String getPasswordByEmail(String email, ConnectionPool connectionPool) throws DatabaseException {
         try (Connection connection = connectionPool.getConnection()) {
             String sql = "SELECT password FROM test.users WHERE email = ?";

@@ -30,28 +30,6 @@ public class ItemMapper {
         return cakeBottoms;
     } // getAllBottoms
 
-    public static CakeBottom getBottomById(ConnectionPool connectionPool,
-                                           int bottomId) throws DatabaseException { //Local attributes
-        CakeBottom bottom = null;
-        String sql = "SELECT * FROM bottom WHERE bot_id = ?";
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, bottomId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                int id = rs.getInt("bot_id");
-                String name = rs.getString("bot_name");
-                int price = rs.getInt("bot_price");
-                bottom = new CakeBottom(id, name, price);
-            } // if
-        } catch (SQLException e) {
-            throw new DatabaseException("Error while getting bottom by id", e);
-        } // catch
-        return bottom;
-    } // getBottomById()
-
     public static List<CakeTop> getAllToppings(ConnectionPool connectionPool) throws DatabaseException { //Local attributes
         List<CakeTop> cakeTops = new ArrayList<>();
         String sql = "SELECT * FROM topping";
@@ -71,6 +49,9 @@ public class ItemMapper {
         return cakeTops;
     } // getAllToppings()
 
+
+    // getToppingById & getBottomById return topping and bottom objects respectively
+    // However, this implementation has been unclear and later abandoned, thus no usages
     public static CakeTop getToppingById(ConnectionPool connectionPool,
                                          int toppingId) throws DatabaseException {   // Local attributes
         CakeTop topping = null;
@@ -93,6 +74,29 @@ public class ItemMapper {
         return topping;
     } // getToppingById()
 
+    public static CakeBottom getBottomById(ConnectionPool connectionPool,
+                                           int bottomId) throws DatabaseException { //Local attributes
+        CakeBottom bottom = null;
+        String sql = "SELECT * FROM bottom WHERE bot_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, bottomId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int id = rs.getInt("bot_id");
+                String name = rs.getString("bot_name");
+                int price = rs.getInt("bot_price");
+                bottom = new CakeBottom(id, name, price);
+            } // if
+        } catch (SQLException e) {
+            throw new DatabaseException("Error while getting bottom by id", e);
+        } // catch
+        return bottom;
+    } // getBottomById()
+
+
     public static String getBottomNameById(int bottomId, ConnectionPool pool) throws DatabaseException {
         String name = null;
         String sql = "SELECT bot_name FROM bottom WHERE bot_id = ?";
@@ -109,7 +113,7 @@ public class ItemMapper {
             throw new DatabaseException("Error while getting bottom name by ID", e);
         }
 
-        return name;
+        return name; //finds the id, returns the name of the bottom (string)
     }
 
     public static String getToppingNameById(int toppingId, ConnectionPool pool) throws DatabaseException {
@@ -128,6 +132,7 @@ public class ItemMapper {
             throw new DatabaseException("Error while getting topping name by ID", e);
         }
 
-        return name;
+        return name; //finds the id, returns the name of the topping (string)
     }
+
 }

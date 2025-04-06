@@ -72,7 +72,7 @@ public class OrderLineMapper {
         }
     }
 
-    // tager prise af toppen og bunde og giver den samlede pris
+    //
     public static int calculatePrice(int bottomId, int topId, int quantity, ConnectionPool pool) throws DatabaseException {
         String sql = "SELECT b.bot_price AS bottom_price, t.top_price AS top_price\n" +
                 "FROM bottom b, topping t\n" +
